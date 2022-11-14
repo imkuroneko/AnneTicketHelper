@@ -1,0 +1,124 @@
+{
+    "bot" : {
+        "clientId"     : "960889806932570153",
+        "token"        : "OTYwODg5ODA2OTMyNTcwMTUz.YkxAXg.Gbejp7M_Yvth0pktW-AMbSAO8o8",
+        "prefix"       : "$nodejs",
+        "ownerId"      : "377052236909379585",
+        "timezone"     : "America/Asuncion",
+        "secDelTicket" : "10"
+    },
+
+    "guilds1" : {
+        "793908257672265799" : [
+            {
+                "emoji" : { "id" : "943216385281101944", "name" : "unicode"},
+                "name" : "Soporte General",
+                "desc" : "Para consultas que no califiquen en cualquier categoría.",
+                "allowed_staff" : [
+                    "793908257672265802"
+                ],
+                "limit" : "5",
+                "id" : "951906944812187709"
+            },
+            {
+                "emoji" : { "id" : "823670493910663228", "name" : "whitelistme"},
+                "name" : "WhitelistMe",
+                "desc" : "Consultas y solicitudes sobre a la plataforma.",
+                "allowed_staff" : [
+                    "793908257672265802",
+                    "952013631774674954"
+                ],
+                "limit" : "5",
+                "id" : "951907069202677880"
+            },
+            {
+                "emoji" : { "id" : "818254431346884608", "name" : "bootstrap"},
+                "name" : "Diseño/Desarrollo Web",
+                "desc" : "Consultas y solicitudes de diseño y desarrollo web.",
+                "allowed_staff" : [
+                    "793908257672265802"
+                ],
+                "limit" : "5",
+                "id" : "951907232914767913"
+            },
+            {
+                "emoji" : { "id" : "818254431844827158", "name" : "nodejs"},
+                "name" : "Desarrollo de Bots",
+                "desc" : "Consultas y solicitudes de desarrollo de bots para Discord.",
+                "allowed_staff" : [
+                    "793908257672265802"
+                ],
+                "limit" : "5",
+                "id" : "951907269153525771"
+            }
+        ]
+    },
+
+
+    "guilds" : {
+        "996639642222874644" : [
+            {
+                "emoji" : { "name" : "🎫" },
+                "name" : "Soporte General",
+                "desc" : "Para consultas que no califiquen en otras categorías.",
+                "allowed_staff" : [
+                    "1002764411787825182"
+                ],
+                "limit" : "5",
+                "id" : "1002761964629540884"
+            },
+            {
+                "emoji" : { "name" : "☠" },
+                "name" : "Solicitud de CK",
+                "desc" : "Solicitar la muerte de tu PJ u otro jugador.",
+                "allowed_staff" : [
+                    "1002779359821713438"
+                ],
+                "limit" : "5",
+                "id" : "1002761731493339239"
+            },
+            {
+                "emoji" : { "name" : "📋" },
+                "name" : "Apelación de Sanción",
+                "desc" : "Para presentar evidencias y apelar una sanción.",
+                "allowed_staff" : [
+                    "1002764411787825182"
+                ],
+                "limit" : "5",
+                "id" : "1002754533115568149"
+            },
+            {
+                "emoji" : { "name" : "💎" },
+                "name" : "Donaciones",
+                "desc" : "Aqui puedes comprar cosas ic ya sea Casas mapeadas, Carros y Peds.",
+                "allowed_staff" : [
+                    "1002765852359270470"
+                ],
+                "limit" : "5",
+                "id" : "1002755218884268042"
+            },
+            {
+                "emoji" : { "name" : "💀" },
+                "name" : "Bandas y Mafias",
+                "desc" : "Puedes abrir tu Mafia o Bandas mandando tu proyecto.",
+                "allowed_staff" : [
+                    "1002761349652299786"
+                ],
+                "limit" : "5",
+                "id" : "1002761612639354950"
+            },
+            {
+                "emoji" : { "name" : "📧" },
+                "name" : "Postulacion De Staff",
+                "desc" : "Puedes postularte para staff.",
+                "allowed_staff" : [
+                    "1002767202346336276"
+                ],
+                "limit" : "5",
+                "id" : "1002755037233164440"
+            }
+        ]
+    }
+
+
+}

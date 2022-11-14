@@ -1,0 +1,8 @@
+{
+    "channelAnnouncement"  : "1012883778831667230",
+    "rolToGive"            : "985606957417238632",
+    "waitingChannel"       : "1026841879133827113",
+    "limitAttempts"        : "2",
+    "hoursBetweenAttempts" : 24,
+    "kickOnLimit"          : true
+}

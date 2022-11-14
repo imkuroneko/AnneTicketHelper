@@ -1,0 +1,11 @@
+{
+    "kickOnLimit" : true,
+    "channelAnnouncement" : "1012883791024500756",
+    "maxPoints"   : 40,
+    "categories" : [
+        { "id" : "B", "name" : "Bajo",      "points" :  5,  "color" : "e3c55b", "ban" : false },
+        { "id" : "M", "name" : "Medio",     "points" : 10,  "color" : "cf733e", "ban" : false },
+        { "id" : "A", "name" : "Alto",      "points" : 15,  "color" : "bd2d3c", "ban" : false },
+        { "id" : "P", "name" : "PermaBan",  "points" : 100, "color" : "30265c", "ban" : true }
+    ]
+}
