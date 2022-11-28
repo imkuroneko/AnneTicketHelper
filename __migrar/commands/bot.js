@@ -3,8 +3,8 @@ const config = require('../data/config.json');
 const embed = require('../data/embeds.json');
 
 // DiscordJs
-const { Client, Intents } = require("discord.js");
-const Discord = require("discord.js");
+const { Client, Intents } = require('discord.js');
+const Discord = require('discord.js');
 
 const cli = new Client({ intents: [Intents.FLAGS.GUILDS] });
 cli.login(config.bot.token);

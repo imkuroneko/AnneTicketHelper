@@ -17,7 +17,6 @@ exports.run = (client, message, args) => {
             message.reply('🦄 Todos los comandos fueron registrados/actualizados!');
         }).catch((error) => {
             message.reply(`\`[🦄 cmdPrefix:slashregister]\` ${error.message}`);
-            console.error('cmdPrefix:slashregister |',error.message);
         });
     } catch(error) {
         console.error('cmdPrefix:slashregister |',error.message);

@@ -4,8 +4,8 @@ const { template, footer } = require('../data/embeds.json');
 
 // Custom functions 💜
 const {
-    userTicketsOnCat,
-    getNewTicketId,
+    openTicketsByUser,
+    generateTicketId,
     saveNewTicket,
     isTicket,
     updateToDeleted,
@@ -35,7 +35,7 @@ module.exports = {
                     var menu_id = int.values[0];
 
                     var category_info = Object.values(config.guilds[guild]).flat().find(r => r.id === menu_id);
-                    const total_open = userTicketsOnCat(user, guild, menu_id);
+                    const total_open = openTicketsByUser(user, guild, menu_id);
 
                     const embed_content = [{
                         color: template.main_embed.color,
@@ -74,7 +74,7 @@ module.exports = {
                         });
                     }
 
-                    const newTicketId = getNewTicketId(guild, menu_id);
+                    const newTicketId = generateTicketId(guild, menu_id);
 
                     int.guild.channels.create(`ticket-${newTicketId}`, {
                         type: 'text',

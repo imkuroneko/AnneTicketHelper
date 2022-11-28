@@ -33,9 +33,6 @@
     "cron": "^2.1.0",
     "dayjs": "^1.11.6",
     "discord.js": "^14.6.0",
-    "https": "^1.0.0",
-    "mysql": "^2.18.1",
     "os": "^0.1.2"
-  },
-  "devDependencies": {}
+  }
 }

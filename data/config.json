@@ -1,0 +1,77 @@
+{
+    "bot" : {
+        "clientId"     : "960889806932570153",
+        "token"        : "OTYwODg5ODA2OTMyNTcwMTUz.YkxAXg.Gbejp7M_Yvth0pktW-AMbSAO8o8",
+        "prefix"       : "$nodejs",
+        "ownerId"      : "377052236909379585",
+        "timezone"     : "America/Asuncion",
+        "secDelTicket" : "10"
+    },
+
+    "guilds" : {
+        "996639642222874644" : [
+            {
+                "emoji" : { "name" : "🎫" },
+                "name" : "Soporte General",
+                "desc" : "Para consultas que no califiquen en otras categorías.",
+                "allowed_staff" : [
+                    "1002764411787825182"
+                ],
+                "limit" : "5",
+                "id" : "1002761964629540884"
+            },
+            {
+                "emoji" : { "name" : "☠" },
+                "name" : "Solicitud de CK",
+                "desc" : "Solicitar la muerte de tu PJ u otro jugador.",
+                "allowed_staff" : [
+                    "1002779359821713438"
+                ],
+                "limit" : "5",
+                "id" : "1002761731493339239"
+            },
+            {
+                "emoji" : { "name" : "📋" },
+                "name" : "Apelación de Sanción",
+                "desc" : "Para presentar evidencias y apelar una sanción.",
+                "allowed_staff" : [
+                    "1002764411787825182"
+                ],
+                "limit" : "5",
+                "id" : "1002754533115568149"
+            },
+            {
+                "emoji" : { "name" : "💎" },
+                "name" : "Donaciones",
+                "desc" : "Aqui puedes comprar cosas ic ya sea Casas mapeadas, Carros y Peds.",
+                "allowed_staff" : [
+                    "1002765852359270470"
+                ],
+                "limit" : "5",
+                "id" : "1002755218884268042"
+            },
+            {
+                "emoji" : { "name" : "💀" },
+                "name" : "Bandas y Mafias",
+                "desc" : "Puedes abrir tu Mafia o Bandas mandando tu proyecto.",
+                "allowed_staff" : [
+                    "1002761349652299786"
+                ],
+                "limit" : "5",
+                "id" : "1002761612639354950"
+            },
+            {
+                "emoji" : { "name" : "📧" },
+                "name" : "Postulacion De Staff",
+                "desc" : "Puedes postularte para staff.",
+                "allowed_staff" : [
+                    "1002767202346336276"
+                ],
+                "limit" : "5",
+                "id" : "1002755037233164440"
+            }
+        ]
+    }
+
+
+}

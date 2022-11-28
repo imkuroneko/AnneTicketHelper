@@ -3,27 +3,23 @@ const { token } = require('./config/bot.json');
 
 // Load required resources =================================================================================================
 const fs = require('fs');
-const { Client, GatewayIntentBits, Partials, Collection, SlashCommandBuilder } = require('discord.js');
+const { Client, GatewayIntentBits, Partials, Collection } = require('discord.js');
 
 // Define client Intents ===================================================================================================
 const client = new Client({
     intents: [
-        GatewayIntentBits.GuildIntegrations,
-        GatewayIntentBits.GuildInvites,
-        GatewayIntentBits.GuildMembers,
-        GatewayIntentBits.GuildMessageReactions,
-        GatewayIntentBits.GuildMessageTyping,
-        GatewayIntentBits.GuildMessages,
-        GatewayIntentBits.GuildVoiceStates,
         GatewayIntentBits.Guilds,
-        GatewayIntentBits.MessageContent
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.GuildMembers,
+        GatewayIntentBits.GuildIntegrations,
+        GatewayIntentBits.GuildMessageReactions,
+        GatewayIntentBits.GuildMessageTyping
     ],
     partials: [
-        Partials.Channel,
-        Partials.GuildMember,
         Partials.Message,
+        Partials.Channel,
         Partials.Reaction,
-        Partials.ThreadMember,
+        Partials.GuildMember,
         Partials.User
     ]
 });

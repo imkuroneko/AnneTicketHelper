@@ -23,7 +23,6 @@ exports.run = (client, message, args) => {
         });
 
         return message.reply('🦄 Todos los comandos slash fueron eliminados');
-
     } catch(error) {
         console.error('cmdPrefix:slashdeleter |',error.message);
     }

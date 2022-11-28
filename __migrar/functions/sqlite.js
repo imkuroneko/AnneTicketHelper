@@ -19,12 +19,12 @@ module.exports = {
         }
     },
 
-    userTicketsOnCat: function(user, guild, category) {
+    openTicketsByUser: function(user, guild, category) {
         const query = sql.prepare(" SELECT count(*) as count FROM tickets WHERE user = ? AND guild = ? AND category = ? AND status = 'A' ");
         return query.get(user, guild, category).count;
     },
 
-    getNewTicketId: function(guild, category) {
+    generateTicketId: function(guild, category) {
         const query = sql.prepare(" SELECT count(*) as count FROM tickets WHERE guild = ? AND category = ? ");
         const num = parseInt(query.get(guild, category).count + 1);
         return num.toString().padStart(5, '0');
