@@ -1,5 +1,5 @@
 // Data
-const config = require('../data/config.json');
+const config = require('../config/params.json');
 const { template } = require('../data/embeds.json');
 
 // Internal functions

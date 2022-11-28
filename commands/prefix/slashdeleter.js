@@ -4,7 +4,7 @@ const { Routes } = require('discord.js');
 const { REST } = require('@discordjs/rest');
 
 // Load configuration files ================================================================================================
-const { clientId, ownerId, token } = require(path.resolve('./config/bot.json'))
+const { clientId, ownerId, token } = require(path.resolve('./config/params.json'))
 
 // Module script ===========================================================================================================
 exports.run = (client, message, args) => {

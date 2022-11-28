@@ -1,5 +1,5 @@
 // Data
-const config = require('../data/config.json');
+const config = require('../config/params.json');
 const emb = require('../data/embeds.json');
 
 // DiscordJs

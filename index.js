@@ -1,5 +1,5 @@
 // Load configuration files ================================================================================================
-const { token } = require('./config/bot.json');
+const { token } = require('./config/params.json');
 
 // Load required resources =================================================================================================
 const fs = require('fs');

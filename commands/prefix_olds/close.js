@@ -1,15 +1,12 @@
 // Data
-const config = require('../data/config.json');
+const config = require('../config/params.json');
 const { template } = require('../data/embeds.json');
 
 // Internal functions
-const { isTicket, getUserCreator, updateToOpen, getTicketCategory } = require('../functions/sqlite.js');
+const { isTicket, getUserCreator, updateToClosed, getTicketCategory } = require('../functions/sqlite.js');
 
 // DiscordJs
 const { MessageActionRow, MessageButton } = require('discord.js');
-
-// Other Dependencies
-const wait = require('node:timers/promises').setTimeout;
 
 exports.run = async (client, message, args) => {
     try {
@@ -20,31 +17,31 @@ exports.run = async (client, message, args) => {
             return;
         }
 
-        const embed_reopen = [{
-            color: template.reopened.color,
-            title: template.reopened.title,
-            description: template.reopened.description
+        const embed_closed = [{
+            color: template.closed.color,
+            title: template.closed.title,
+            description: template.closed.description.replaceAll('{prefix_mention}', config.bot.prefix)
         }];
 
-        const btns_ticket_reopen =  new MessageActionRow()
+        const btns_ticket_closed =  new MessageActionRow()
             .addComponents(
-                new MessageButton().setCustomId('close').setLabel('Cerrar Ticket').setStyle('DANGER')
+                new MessageButton().setCustomId('reopen').setLabel('Reabrir Ticket').setStyle('SUCCESS'),
+                new MessageButton().setCustomId('delete').setLabel('Eliminar Ticket').setStyle('DANGER')
             );
-        message.reply({ embeds: embed_reopen, components: [ btns_ticket_reopen ] });
+        message.reply({ embeds: embed_closed, components: [ btns_ticket_closed ] });
 
-        updateToOpen(guildId, channelId);
-
-        await wait(750);
+        updateToClosed(guildId, channelId);
 
         message.guild.channels.fetch(channelId).then( (channelEdit) => {
             var userCreator = getUserCreator(guildId, channelId);
             var menu_id = getTicketCategory(guildId, channelId);
             var category_info = Object.values(config.guilds[guildId]).flat().find(r => r.id === menu_id);
 
+
             var permissions = [
                 { id: message.guild.roles.everyone.id, deny: [ 'VIEW_CHANNEL', 'READ_MESSAGE_HISTORY' ] },
                 { id: config.bot.clientId, allow: [ 'VIEW_CHANNEL', 'READ_MESSAGE_HISTORY', 'SEND_MESSAGES', 'MANAGE_CHANNELS', 'MANAGE_MESSAGES', 'MANAGE_ROLES' ] },
-                { id: userCreator, allow: [ 'VIEW_CHANNEL', 'READ_MESSAGE_HISTORY', 'SEND_MESSAGES' ] }
+                { id: userCreator, deny: [ 'VIEW_CHANNEL', 'READ_MESSAGE_HISTORY', 'SEND_MESSAGES' ] }
             ];
 
             if(category_info.allowed_staff.length > 0) {
@@ -53,12 +50,12 @@ exports.run = async (client, message, args) => {
                 });
             }
 
-            message.guild.channels.fetch(channelId).edit({
-                permissionOverwrites: permissions
+            channelEdit.edit({
+                permissionOverwrites: allowed_staff
             });
-            console.log(`[🎫] Ticket Reabierto | Categoria: ${category_info.name} | ID: ${channelEdit.name}`);
+            console.log(`[🎫] Ticket Cerrado | Categoria: ${category_info.name} | ID: ${channelEdit.name}`);
         });
     } catch(error) {
-        console.error('reOpenTicket::main', error);
+        console.error('closeTicket::main', error);
     }
 }

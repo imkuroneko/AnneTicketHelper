@@ -7,18 +7,17 @@ const sqlite = require(path.resolve('./functions/sqlite.js'))
 
 // Module script ===========================================================================================================
 module.exports = {
-    name: Events.GuildMemberRemove,
-    async execute(member) {
+    name: Events.ChannelDelete,
+    async execute(channel) {
         try {
+            const guildId = channel.guildId;
+            const channelId = channel.id;
 
-            console.log(member);
+            if(!sqlite.isTicket(guildId, channelId)) { return; }
 
-            // const userId = member.user.id;
-            // sqlite.removeUserFromTickets(userId);
-            // agregar para cerrar los tickets del usuario salido
-
+            sqlite.updateStatus(guildId, channelId, 'deleted');
         } catch(error) {
-            console.error('event:clientMemberRemove |', error.message);
+            console.error('event:channelDelete |', error.message);
         }
     }
 };

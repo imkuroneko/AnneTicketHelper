@@ -1,3 +1,7 @@
+// Load configuration files ================================================================================================
+var idx=256, hex=[], size=256, buf;
+while (idx--) hex[idx] = (idx + 256).toString(16).substring(1);
+
 // Functions Export ========================================================================================================
 module.exports = {
     duration: (duration, useMilli = false) => {
@@ -27,4 +31,12 @@ module.exports = {
         }
     },
 
+    uid: function(len) {
+        var i = 0;
+        var tmp = (len || 11);
+        if(!buf || ((idx + tmp) > size*2)) {
+            for(buf = '', idx = 0; i < size; i++) { buf += hex[Math.random() * 256 | 0]; }
+        }
+        return buf.substring(idx, idx++ + tmp);
+    },
 };

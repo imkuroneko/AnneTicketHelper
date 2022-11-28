@@ -2,7 +2,7 @@
 const path = require('path');
 
 // Load configuration files ================================================================================================
-const { ownerId } = require(path.resolve('./config/bot.json'));
+const { ownerId } = require(path.resolve('./config/params.json'));
 
 // Module script ===========================================================================================================
 exports.run = (client, message, args) => {

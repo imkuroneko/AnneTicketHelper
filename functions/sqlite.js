@@ -5,7 +5,7 @@ const dayjs = require('dayjs');
 const timezone = require('dayjs/plugin/timezone');
 
 // Load configuration files ================================================================================================
-const config = require(path.resolve('./data/config.json'));
+const { serverTimezone } = require(path.resolve('./config/params.json'));
 
 // Database ================================================================================================================
 const sql = new SQLite(path.resolve('./data/db.sqlite'));
@@ -13,7 +13,7 @@ const sql = new SQLite(path.resolve('./data/db.sqlite'));
 // Internal Function =======================================================================================================
 function getCurrentTimestamp() {
     dayjs.extend(timezone);
-    dayjs.tz.setDefault(config.bot.timezone);
+    dayjs.tz.setDefault(serverTimezone);
     return dayjs().format('YYYY-MM-DD HH:mm:ss');
 }
 
@@ -28,12 +28,12 @@ module.exports = {
         }
     },
 
-    openTicketsByUser: (guildId, categoryId, userId) => {
+    countOpenTicketsByUser: (guildId, categoryId, userId) => {
         try {
             const query = sql.prepare(" SELECT count(*) as count FROM tickets_details WHERE user = ? AND guild = ? AND category = ? AND status = 'A' ");
             return query.get(userId, guildId, categoryId).count;
         } catch(error) {
-            console.error('[sqlite] openTicketsByUser', error.message);
+            console.error('[sqlite] countOpenTicketsByUser', error.message);
         }
     },
 
@@ -83,42 +83,6 @@ module.exports = {
             query.run({ gld: guildId, chn: channelId, sts: status, tms: timestamp });
         } catch(error) {
             console.error('[sqlite] updateStatus', error.message);
-        }
-    },
-
-    addParticipant: (guildId, channelId, userId) => {
-        try {
-            const query = sql.prepare(" INSERT INTO tickets_participants (guild, channel, user) VALUES (@gld, @chn, @usr); ");
-            query.run({ gld: guildId, chn: channelId, usr: userId });
-        } catch(error) {
-            console.error('[sqlite] addParticipant', error.message);
-        }
-    },
-
-    removeParticipant: (guildId, channelId, userId) => {
-        try {
-            const query = sql.prepare(" DELETE FROM tickets_participants WHERE guild = @gld AND channel = @chn AND user = @usr; ");
-            query.run({ gld: guildId, chn: channelId, usr: userId });
-        } catch(error) {
-            console.error('[sqlite] removeParticipant', error.message);
-        }
-    },
-
-    removeUserFromTickets: (userId) => {
-        try {
-            const query = sql.prepare(" DELETE FROM tickets_participants WHERE user = @usr; ");
-            query.run({ usr: userId });
-        } catch(error) {
-            console.error('[sqlite] removeUserFromTickets', error.message);
-        }
-    },
-
-    getParticipants: (guildId, channelId) => {
-        try {
-            const row = sql.prepare("SELECT user FROM tickets_participants WHERE channel = ? AND guild = ? ; ");
-            return row.all(channelId, guildId);
-        } catch(error) {
-            console.error('[sqlite] getParticipants', error.message);
         }
     },
 
