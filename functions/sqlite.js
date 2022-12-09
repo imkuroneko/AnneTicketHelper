@@ -87,4 +87,40 @@ module.exports = {
         }
     },
 
+    createNewCategory: () => {
+        try {
+            const query = sql.prepare(" INSERT INTO tickets_categories (guild, category, channel, user, timestamp_creation) VALUES (@g, @c, @x, @u, @t); ");
+            query.run({ g: guildId, c: categoryId, x: channelId, u: userId, t: getCurrentTimestamp() });
+        } catch(error) {
+            console.error(color.red('[sqlite:createNewCategory]'), error.message);
+        }
+    },
+
+    readCategory: (uid) => {
+        try {
+            const query = sql.prepare(" SELECT * FROM tickets_categories WHERE uid = ? ");
+            return query.get(uid);
+        } catch(error) {
+            console.error(color.red('[sqlite:readCategory]'), error.message);
+        }
+    },
+
+    updateCategory: (nombre, emoji, description, limit, uid) => {
+        try {
+            const query = sql.prepare(" UPATE tickets_categories SET nombre = @n, emoji = @e, description = @d, limit_tickets = @l WHERE uid = @u; ");
+            query.run({ n: nombre, e: emoji, d: description, l: limit, u: uid });
+        } catch(error) {
+            console.error(color.red('[sqlite:updateCategory]'), error.message);
+        }
+    },
+
+    deleteCategory: () => {
+        try {
+            const query = sql.prepare(" DELETE FROM tickets_categories WHERE uid = @uid; ");
+            query.run({ uid: guildId });
+        } catch(error) {
+            console.error(color.red('[sqlite:deleteCategory]'), error.message);
+        }
+    },
+
 };

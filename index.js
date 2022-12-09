@@ -31,39 +31,53 @@ const client = new Client({
 // Track load time =========================================================================================================
 client.startupTime = Date.now();
 
-// Load slash commands =====================================================================================================
-client.commandsSlash = new Collection();
+// [1] Admin Commands (with prefix) ========================================================================================
 try {
-    var pathFiles = './commands/slash';
-    client.slashRegister = [];
-    const slashCommandFiles = fs.readdirSync(path.resolve(pathFiles)).filter(file => file.endsWith('.js'));
-    for(const slashFile of slashCommandFiles) {
-        var command = require(path.resolve(path.join(pathFiles, slashFile)));
-        client.slashRegister.push(command.data.toJSON());
-        client.commandsSlash.set(command.data.name, command);
-    }
-} catch(error) {
-    console.error(color.red('[load:cmds:slash]'), error.message);
-}
-// Admin Commands (with prefix) ============================================================================================
-try {
-    var pathFiles = './commands/prefix';
+    var pathFiles = './commands';
     client.commandsPrefix = new Collection();
     const prefixCommandFiles = fs.readdirSync(path.resolve(pathFiles)).filter(file => file.endsWith(".js"));
     for(const prefixFile of prefixCommandFiles) {
         client.commandsPrefix.set(prefixFile.split(".")[0], require(path.resolve(path.join(pathFiles, prefixFile))));
     }
 } catch(error) {
-    console.error(color.red('[load:cmds:prefix]'), error.message);
+    console.error(color.red('[load:cmds]'), error.message);
 }
 
-// Handle :: Interactions ==================================================================================================
+// [2] Interactions :: SlashCommands =======================================================================================
+client.interactionsSlash = new Collection();
 try {
-    var pathFiles = './interactions';
-    client.interactions = new Collection();
+    var pathFiles = './interactions/slashCommands';
+    client.slashRegister = [];
+    const slashCommandFiles = fs.readdirSync(path.resolve(pathFiles)).filter(file => file.endsWith('.js'));
+    for(const slashFile of slashCommandFiles) {
+        var command = require(path.resolve(path.join(pathFiles, slashFile)));
+        client.slashRegister.push(command.data.toJSON());
+        client.interactionsSlash.set(command.data.name, command);
+    }
+} catch(error) {
+    console.error(color.red('[load:cmds:slash]'), error.message);
+}
+
+// [3] Interactions :: Buttons =============================================================================================
+try {
+    var pathFiles = './interactions/buttons';
+    client.interactionsButtons = new Collection();
     const interactionsFiles = fs.readdirSync(path.resolve(pathFiles)).filter(file => file.endsWith('.js'));
     for(const interactionFile of interactionsFiles) {
-        client.interactions.set(interactionFile.split(".")[0], require(path.resolve(path.join(pathFiles, interactionFile))));
+        client.interactionsButtons.set(interactionFile.split(".")[0], require(path.resolve(path.join(pathFiles, interactionFile))));
+    }
+} catch(error) {
+    console.error(color.red('[load:interactions]'), error.message);
+}
+
+
+// [4] Interactions :: Menus ===============================================================================================
+try {
+    var pathFiles = './interactions/selectMenu';
+    client.interactionsSelectMenu = new Collection();
+    const interactionsFiles = fs.readdirSync(path.resolve(pathFiles)).filter(file => file.endsWith('.js'));
+    for(const interactionFile of interactionsFiles) {
+        client.interactionsSelectMenu.set(interactionFile.split(".")[0], require(path.resolve(path.join(pathFiles, interactionFile))));
     }
 } catch(error) {
     console.error(color.red('[load:interactions]'), error.message);

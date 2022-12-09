@@ -2,6 +2,9 @@
 const { color } = require('console-log-colors');
 const { SlashCommandBuilder, ChannelType } = require('discord.js');
 
+// Load SQLite Helper ======================================================================================================
+const sqlite = require(path.resolve('./functions/sqlite.js'));
+
 // Module script ===========================================================================================================
 module.exports = {
     data: new SlashCommandBuilder()
@@ -26,6 +29,8 @@ module.exports = {
             console.log(color.green('[DEBUG] categoria nom: '), categoria.name);
             console.log(color.green('[DEBUG] categoria gld: '), categoria.guildId);
 
+            sqlite.
+
             const content = `
                 Se ha creado exitosamente la nueva categoría! Recuerda deberás agregarlo manualmente en los selectores donde lo necesites.
 
@@ -41,7 +46,7 @@ module.exports = {
 
             return interaction.reply({ embeds: [{ color: 0x4f30b3, description: content, }], ephemeral: true  });
         } catch(error) {
-            console.error(color.red('[cmdSlash:catnuevo]'), error.message);
+            console.error(color.red('[interaction:slashcmd::catnuevo]'), error.message);
         }
     }
 };

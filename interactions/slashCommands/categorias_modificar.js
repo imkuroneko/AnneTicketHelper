@@ -2,6 +2,9 @@
 const { color } = require('console-log-colors');
 const { SlashCommandBuilder, ChannelType } = require('discord.js');
 
+// Load SQLite Helper ======================================================================================================
+const sqlite = require(path.resolve('./functions/sqlite.js'));
+
 // Module script ===========================================================================================================
 module.exports = {
     data: new SlashCommandBuilder()
@@ -29,7 +32,7 @@ module.exports = {
 
             return interaction.reply({ embeds: [{ color: 0x4f30b3, description: 'Modificar Categoría', }] });
         } catch(error) {
-            console.error(color.red('[cmdSlash:catmodificar]'), error.message);
+            console.error(color.red('[interaction:slashcmd::catmodificar]'), error.message);
         }
     }
 };
