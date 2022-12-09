@@ -1,4 +1,4 @@
-<h2 align="center"> 🎫 AyamiTicketHelper </h2>
+<h2 align="center"> 🎫 AnneTicketHelper </h2>
 
 <pre align="center">
 Sistema de tickets de soporte para discord (v2)
