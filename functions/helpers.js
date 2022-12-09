@@ -31,6 +31,10 @@ module.exports = {
         }
     },
 
+    formatNumber: function(val) {
+        return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    },
+
     uid: function(len) {
         var i = 0;
         var tmp = (len || 11);

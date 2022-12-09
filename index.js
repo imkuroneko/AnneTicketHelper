@@ -1,13 +1,17 @@
-// Load configuration files ================================================================================================
-const { token } = require('./config/params.json');
-
 // Load required resources =================================================================================================
+const { color } = require('console-log-colors');
+const path = require('path');
 const fs = require('fs');
 const { Client, GatewayIntentBits, Partials, Collection } = require('discord.js');
+
+// Load configuration files ================================================================================================
+const { token } = require(path.resolve('./config/params.json'));
 
 // Define client Intents ===================================================================================================
 const client = new Client({
     intents: [
+        GatewayIntentBits.GuildEmojisAndStickers,
+        GatewayIntentBits.MessageContent,
         GatewayIntentBits.Guilds,
         GatewayIntentBits.GuildMessages,
         GatewayIntentBits.GuildMembers,
@@ -24,68 +28,71 @@ const client = new Client({
     ]
 });
 
+// Track load time =========================================================================================================
+client.startupTime = Date.now();
+
 // Load slash commands =====================================================================================================
 client.commandsSlash = new Collection();
 try {
+    var pathFiles = './commands/slash';
     client.slashRegister = [];
-    const slashCommandFiles = fs.readdirSync('./commands/slash').filter(file => file.endsWith('.js'));
+    const slashCommandFiles = fs.readdirSync(path.resolve(pathFiles)).filter(file => file.endsWith('.js'));
     for(const slashFile of slashCommandFiles) {
-        var commandName = slashFile.split(".")[0];
-        var command = require(`./commands/slash/${slashFile}`);
-
+        var command = require(path.resolve(path.join(pathFiles, slashFile)));
         client.slashRegister.push(command.data.toJSON());
         client.commandsSlash.set(command.data.name, command);
     }
 } catch(error) {
-    console.error('load:cmds:slash |', error.message);
+    console.error(color.red('[load:cmds:slash]'), error.message);
 }
 // Admin Commands (with prefix) ============================================================================================
 try {
+    var pathFiles = './commands/prefix';
     client.commandsPrefix = new Collection();
-    const prefixCommandFiles = fs.readdirSync('./commands/prefix').filter(file => file.endsWith(".js"));
+    const prefixCommandFiles = fs.readdirSync(path.resolve(pathFiles)).filter(file => file.endsWith(".js"));
     for(const prefixFile of prefixCommandFiles) {
-        var commandName = prefixFile.split(".")[0];
-        var command = require(`./commands/prefix/${prefixFile}`);
-        client.commandsPrefix.set(commandName, command);
+        client.commandsPrefix.set(prefixFile.split(".")[0], require(path.resolve(path.join(pathFiles, prefixFile))));
     }
 } catch(error) {
-    console.error('load:cmds:prefix |', error.message);
+    console.error(color.red('[load:cmds:prefix]'), error.message);
 }
 
 // Handle :: Interactions ==================================================================================================
 try {
+    var pathFiles = './interactions';
     client.interactions = new Collection();
-    const interactionsFiles = fs.readdirSync('./interactions').filter(file => file.endsWith('.js'));
+    const interactionsFiles = fs.readdirSync(path.resolve(pathFiles)).filter(file => file.endsWith('.js'));
     for(const interactionFile of interactionsFiles) {
-        var commandName = interactionFile.split(".")[0];
-        var command = require(`./interactions/${interactionFile}`);
-        client.interactions.set(commandName, command);
+        client.interactions.set(interactionFile.split(".")[0], require(path.resolve(path.join(pathFiles, interactionFile))));
     }
 } catch(error) {
-    console.error('load:interactions |', error.message);
+    console.error(color.red('[load:interactions]'), error.message);
 }
 
 // Handle :: Events ========================================================================================================
 try {
-    const events = fs.readdirSync('./events').filter(file => file.endsWith('.js'));
+    var pathFiles = './events';
+    const events = fs.readdirSync(path.resolve(pathFiles)).filter(file => file.endsWith('.js'));
     for(const file of events) {
-        const event = require(`./events/${file}`);
+        const event = require(path.resolve(path.join(pathFiles, file)));
         client.on(event.name, (...args) => event.execute(...args));
     }
 } catch(error) {
-    console.error('load:events |', error.message);
+    console.error(color.red('[load:events]'), error.message);
 }
 
 // Define token a init bot =================================================================================================
-client.login(token).catch((error) => {
-    console.error('client:token |', error.message);
+client.login(token).then(() => {
+    console.log(color.green('[init]'), 'Bot operativo | Inicializado en', color.magenta(`${Date.now() - client.startupTime}ms`));
+}).catch((error) => {
+    console.error(color.red('[client:token]'), error.message);
 });
 
 // Handle Error ============================================================================================================
 process.on('unhandledRejection', (error) => {
-    console.error('process:unhandledError |', error.message);
+    console.error(color.red('[process:unhandledError]'), error.message);
 });
 
 client.on('shardError', (error) => {
-    console.error('process:shardError |', error.message);
+    console.error(color.red('[process:shardError]'), error.message);
 });

@@ -1,4 +1,5 @@
 // Load required resources =================================================================================================
+const { color } = require('console-log-colors');
 const { Events } = require('discord.js');
 const path = require('path');
 
@@ -18,7 +19,7 @@ module.exports = {
             // agregar para cerrar los tickets del usuario salido
 
         } catch(error) {
-            console.error('event:clientMemberRemove |', error.message);
+            console.error(color.red('[event:guildMemberRemove]'), error.message);
         }
     }
 };

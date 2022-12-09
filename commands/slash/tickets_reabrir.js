@@ -1,4 +1,5 @@
 // Load required resources =================================================================================================
+const { color } = require('console-log-colors');
 const { SlashCommandBuilder } = require('discord.js');
 
 // Module script ===========================================================================================================
@@ -11,7 +12,7 @@ module.exports = {
         try {
             return interaction.reply({ embeds: [{ color: 0x4f30b3, description: 'Reabrir ticket', }] });
         } catch(error) {
-            console.error('cmdSlash:reabrir |', error.message);
+            console.error(color.red('[cmdSlash:reabrir]'), error.message);
         }
     }
 };

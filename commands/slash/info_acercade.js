@@ -1,4 +1,5 @@
 // Load required resources =================================================================================================
+const { color } = require('console-log-colors');
 const { SlashCommandBuilder } = require('discord.js');
 
 // Module script ===========================================================================================================
@@ -16,7 +17,7 @@ module.exports = {
                 footer: { text: 'De by KuroNeko#0001' }
             }] });
         } catch(error) {
-            console.error('cmdSlash:acercade |', error.message);
+            console.error(color.red('[cmdSlash:acercade]'), error.message);
         }
     }
 };

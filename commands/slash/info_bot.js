@@ -1,10 +1,11 @@
 // Load required resources =================================================================================================
+const { color } = require('console-log-colors');
 const { SlashCommandBuilder } = require('discord.js');
 const cpuStat = require('cpu-stat');
 const path = require('path');
 const os = require('os');
 
-// Load configuration files ================================================================================================
+// Load custom functions ===================================================================================================
 const helpers = require(path.resolve('./functions/helpers.js'));
 
 // Module script ===========================================================================================================
@@ -36,7 +37,7 @@ module.exports = {
                 }] });
             });
         } catch(error) {
-            console.error('cmdSlash:bot |', error.message);
+            console.error(color.red('[cmdSlash:bot]'), error.message);
         }
     }
 };

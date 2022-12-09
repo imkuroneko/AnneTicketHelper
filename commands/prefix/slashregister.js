@@ -1,4 +1,5 @@
 // Load required resources =================================================================================================
+const { color } = require('console-log-colors');
 const path = require('path');
 const { Routes } = require('discord.js');
 const { REST } = require('@discordjs/rest');
@@ -17,8 +18,9 @@ exports.run = (client, message, args) => {
             message.reply('🦄 Todos los comandos fueron registrados/actualizados!');
         }).catch((error) => {
             message.reply(`\`[🦄 cmdPrefix:slashregister]\` ${error.message}`);
+            console.error(color.red('[cmdPrefix:slashregister]'), error.message);
         });
     } catch(error) {
-        console.error('cmdPrefix:slashregister |',error.message);
+        console.error(color.red('[cmdPrefix:slashregister]'), error.message);
     }
 }

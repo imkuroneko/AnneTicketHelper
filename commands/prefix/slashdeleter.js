@@ -1,4 +1,5 @@
 // Load required resources =================================================================================================
+const { color } = require('console-log-colors');
 const path = require('path');
 const { Routes } = require('discord.js');
 const { REST } = require('@discordjs/rest');
@@ -24,6 +25,6 @@ exports.run = (client, message, args) => {
 
         return message.reply('🦄 Todos los comandos slash fueron eliminados');
     } catch(error) {
-        console.error('cmdPrefix:slashdeleter |',error.message);
+        console.error(color.red('[cmdPrefix:slashdeleter]'), error.message);
     }
 }

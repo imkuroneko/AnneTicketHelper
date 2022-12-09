@@ -1,4 +1,5 @@
 // Load required resources =================================================================================================
+const { color } = require('console-log-colors');
 const { SlashCommandBuilder, ChannelType } = require('discord.js');
 
 // Module script ===========================================================================================================
@@ -28,7 +29,7 @@ module.exports = {
 
             return interaction.reply({ embeds: [{ color: 0x4f30b3, description: 'Modificar Categoría', }] });
         } catch(error) {
-            console.error('cmdSlash:catmodificar |', error.message);
+            console.error(color.red('[cmdSlash:catmodificar]'), error.message);
         }
     }
 };
