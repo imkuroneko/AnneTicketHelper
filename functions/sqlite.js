@@ -11,11 +11,20 @@ const { serverTimezone } = require(path.resolve('./config/params.json'));
 // Database ================================================================================================================
 const sql = new SQLite(path.resolve('./data/db.sqlite'));
 
+// Load custom functions ===================================================================================================
+const helpers = require(path.resolve('./functions/helpers.js'));
+
 // Internal Function =======================================================================================================
 function getCurrentTimestamp() {
     dayjs.extend(timezone);
     dayjs.tz.setDefault(serverTimezone);
     return dayjs().format('YYYY-MM-DD HH:mm:ss');
+}
+
+function genCatUID() {
+    var newUID = helpers.uid(8);
+    const query = sql.prepare(" SELECT count(*) as count FROM tickets_categories WHERE uid = ? ");
+    if(query.get(newUID).count == 0) { return newUID; } else { return genCatUID(); }
 }
 
 // Functions Export ========================================================================================================
@@ -87,10 +96,19 @@ module.exports = {
         }
     },
 
-    createNewCategory: () => {
+    listCategories: () => {
         try {
-            const query = sql.prepare(" INSERT INTO tickets_categories (guild, category, channel, user, timestamp_creation) VALUES (@g, @c, @x, @u, @t); ");
-            query.run({ g: guildId, c: categoryId, x: channelId, u: userId, t: getCurrentTimestamp() });
+            const query = sql.prepare(" SELECT * FROM tickets_categories ");
+            return query.all();
+        } catch(error) {
+            console.error(color.red('[sqlite:listCategories]'), error.message);
+        }
+    },
+
+    createNewCategory: (name, category, emoji, description, limit) => {
+        try {
+            const query = sql.prepare(" INSERT INTO tickets_categories (uid, name, category, emoji, description, limit_tickets) VALUES (@u, @n, @c, @e, @d, @l); ");
+            query.run({ u: genCatUID(), n: name, c: category, e: emoji, d: description, l: limit });
         } catch(error) {
             console.error(color.red('[sqlite:createNewCategory]'), error.message);
         }
@@ -105,10 +123,10 @@ module.exports = {
         }
     },
 
-    updateCategory: (nombre, emoji, description, limit, uid) => {
+    updateCategory: (uid, name, description, limit) => {
         try {
-            const query = sql.prepare(" UPATE tickets_categories SET nombre = @n, emoji = @e, description = @d, limit_tickets = @l WHERE uid = @u; ");
-            query.run({ n: nombre, e: emoji, d: description, l: limit, u: uid });
+            const query = sql.prepare(" UPDATE tickets_categories SET name = @n, description = @d, limit_tickets = @l WHERE uid = @u; ");
+            query.run({ n: name, d: description, l: limit, u: uid });
         } catch(error) {
             console.error(color.red('[sqlite:updateCategory]'), error.message);
         }
@@ -122,5 +140,4 @@ module.exports = {
             console.error(color.red('[sqlite:deleteCategory]'), error.message);
         }
     },
-
 };

@@ -17,7 +17,7 @@ module.exports = {
                 footer: { text: 'De by KuroNeko#0001' }
             }] });
         } catch(error) {
-            console.error(color.red('[interaction:slashcmd::acercade]'), error.message);
+            console.error(color.red('[interaction:slashcmd:acercade]'), error.message);
         }
     }
 };

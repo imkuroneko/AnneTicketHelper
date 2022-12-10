@@ -9,19 +9,21 @@ const sqlite = require(path.resolve('./functions/sqlite.js'));
 // Module script ===========================================================================================================
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('cateliminar')
-        .setDescription('Eliminar Categoría')
-        .addStringOption(option => option.setName('tck_id').setDescription('ID de la categoría a eliminar').setRequired(true).setMinLength(8).setMaxLength(8))
+        .setName('catlistar')
+        .setDescription('Listar todas las categorías disponibles')
         .setDMPermission(false),
     async execute(interaction) {
         try {
-            const tck_id = interaction.options.getString('tck_id');
+            const categorias = await sqlite.listCategories();
 
-            console.log('<<<<<<<< tck_id', tck_id);
+            var fields = [];
+            categorias.forEach((cat) => {
+                fields.push({ name: `**Categoría:** ${cat.name} (\`${cat.uid}\`)`, value: "```yaml\nLimite tickets abiertos: "+cat.limit_tickets+"\nDescripcion: "+cat.description+"```" });
+            });
 
-            return interaction.reply({ embeds: [{ color: 0x4f30b3, description: 'Eliminar Categoría', }] });
+            return interaction.reply({ embeds: [{ color: 0x4f30b3, title: '🎫 Categorías Disponibles', fields: fields }] });
         } catch(error) {
-            console.error(color.red('[interaction:slashcmd:cateliminar]'), error.message);
+            console.error(color.red('[interaction:slashcmd:catlistar]'), error.message);
         }
     }
 };

@@ -37,7 +37,7 @@ module.exports = {
                 }] });
             });
         } catch(error) {
-            console.error(color.red('[interaction:slashcmd::bot]'), error.message);
+            console.error(color.red('[interaction:slashcmd:bot]'), error.message);
         }
     }
 };

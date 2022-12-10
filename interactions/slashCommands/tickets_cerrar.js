@@ -1,4 +1,5 @@
 // Load required resources =================================================================================================
+const path = require('path');
 const { color } = require('console-log-colors');
 const { SlashCommandBuilder } = require('discord.js');
 
@@ -15,7 +16,7 @@ module.exports = {
         try {
             return interaction.reply({ embeds: [{ color: 0x4f30b3, description: 'Cerrar ticket', }] });
         } catch(error) {
-            console.error(color.red('[interaction:slashcmd::cerrar]'), error.message);
+            console.error(color.red('[interaction:slashcmd:cerrar]'), error.message);
         }
     }
 };
