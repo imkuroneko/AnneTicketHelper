@@ -9,7 +9,7 @@ const sqlite = require(path.resolve('./functions/sqlite.js'));
 // Module script ===========================================================================================================
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('catmodificar')
+        .setName('catedit')
         .setDescription('Modificar descripción y límite de la categoría')
         .addStringOption(option => option.setName('uid').setDescription('ID de la categoría').setRequired(true).setMinLength(8).setMaxLength(8))
         .addStringOption(option => option.setName('nombre').setDescription('Nuevo nombre de la categoría').setRequired(true).setMinLength(5).setMaxLength(35))
@@ -26,7 +26,7 @@ module.exports = {
             var getCategory = await sqlite.readCategory(uid);
 
             if(typeof getCategory == 'undefined') {
-                return interaction.reply({ content: 'No se ha encontrado una categoría con el ID indicado', ephemeral: true });
+                return interaction.reply({ content: 'No se ha encontrado una categoría con el UID indicado', ephemeral: true });
             }
 
             if(isNaN(limite)) { return interaction.reply({ content: 'El límite debe ser numérico', ephemeral: true }); }

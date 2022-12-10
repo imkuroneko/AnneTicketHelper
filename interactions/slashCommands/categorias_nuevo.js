@@ -9,7 +9,7 @@ const sqlite = require(path.resolve('./functions/sqlite.js'));
 // Module script ===========================================================================================================
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('catnuevo')
+        .setName('catreg')
         .setDescription('Crear Categoría')
         .addStringOption(option => option.setName('nombre').setDescription('Nombre de la categoría').setRequired(true).setMinLength(5).setMaxLength(35))
         .addStringOption(option => option.setName('descripcion').setDescription('Descripción de la categoría').setRequired(true).setMinLength(10).setMaxLength(512))

@@ -12,9 +12,8 @@ module.exports = {
         try {
             return interaction.reply({ embeds: [{
                 color: 0x4f30b3,
-                title: '🎫 AyamiTicketHelper 🌸',
+                title: '🎫 AnneTicketHelper 🌸',
                 description: 'Sistema de tickets multicategorías para Discord.\n**Desarrollado por:** [@KuroNeko](https://github.com/imkuroneko)',
-                footer: { text: 'De by KuroNeko#0001' }
             }] });
         } catch(error) {
             console.error(color.red('[interaction:slashcmd:acercade]'), error.message);

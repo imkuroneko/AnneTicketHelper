@@ -9,7 +9,7 @@ const sqlite = require(path.resolve('./functions/sqlite.js'));
 // Module script ===========================================================================================================
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('catlistar')
+        .setName('catlist')
         .setDescription('Listar todas las categorías disponibles')
         .setDMPermission(false),
     async execute(interaction) {

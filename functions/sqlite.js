@@ -132,12 +132,68 @@ module.exports = {
         }
     },
 
-    deleteCategory: () => {
+    deleteCategory: (uid) => {
         try {
             const query = sql.prepare(" DELETE FROM tickets_categories WHERE uid = @uid; ");
-            query.run({ uid: guildId });
+            query.run({ uid: uid });
         } catch(error) {
             console.error(color.red('[sqlite:deleteCategory]'), error.message);
         }
     },
+
+    countTicketsOnCategory: (uid) => {
+        try {
+            const query = sql.prepare(" SELECT count(*) as count FROM tickets_details WHERE category = ? AND status != 'D' ");
+            return query.get(uid).count;
+        } catch(error) {
+            console.error(color.red('[sqlite:countTicketsOnCategory]'), error.message);
+        }
+    },
+
+    // Stats
+    countTotalCategories: () => {
+        try {
+            const query = sql.prepare(" SELECT count(*) as count FROM tickets_categories ");
+            return query.get().count;
+        } catch(error) {
+            console.error(color.red('[sqlite:countTotalCategories]'), error.message);
+        }
+    },
+
+    countTotalTicketsGlobal: () => {
+        try {
+            const query = sql.prepare(" SELECT count(*) as count FROM tickets_details ");
+            return query.get().count;
+        } catch(error) {
+            console.error(color.red('[sqlite:countTotalTicketsGlobal]'), error.message);
+        }
+    },
+
+    countTotalTicketsOpen: () => {
+        try {
+            const query = sql.prepare(" SELECT count(*) as count FROM tickets_details WHERE status = 'A' ");
+            return query.get().count;
+        } catch(error) {
+            console.error(color.red('[sqlite:countTotalTicketsOpen]'), error.message);
+        }
+    },
+
+    countTotalTicketsClosed: () => {
+        try {
+            const query = sql.prepare(" SELECT count(*) as count FROM tickets_details WHERE status = 'C' ");
+            return query.get().count;
+        } catch(error) {
+            console.error(color.red('[sqlite:countTotalTicketsClosed]'), error.message);
+        }
+    },
+
+    countTotalTicketsDeleted: () => {
+        try {
+            const query = sql.prepare(" SELECT count(*) as count FROM tickets_details WHERE status = 'D' ");
+            return query.get().count;
+        } catch(error) {
+            console.error(color.red('[sqlite:countTotalTicketsDeleted]'), error.message);
+        }
+    },
+
 };
