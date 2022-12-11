@@ -50,17 +50,16 @@ module.exports = {
     generateTicketId: (guildId, categoryId) => {
         try {
             const query = sql.prepare(" SELECT count(*) as count FROM tickets_details WHERE guild = ? AND category = ? ");
-            const num = parseInt(query.get(guildId, categoryId).count + 1);
-            return num.toString().padStart(5, '0');
+            return parseInt(query.get(guildId, categoryId).count + 1).toString().padStart(5, '0');
         } catch(error) {
             console.error(color.red('[sqlite:generateTicketId]'), error.message);
         }
     },
 
-    createNewTicket: (guildId, categoryId, channelId, userId) => {
+    createNewTicket: (ticket, guildId, categoryId, channelId, userId) => {
         try {
-            const query = sql.prepare(" INSERT INTO tickets (guild, category, channel, user, timestamp_creation) VALUES (@g, @c, @x, @u, @t); ");
-            query.run({ g: guildId, c: categoryId, x: channelId, u: userId, t: getCurrentTimestamp() });
+            const query = sql.prepare(" INSERT INTO tickets_details (ticket, guild, category, channel, user, timestamp_creation) VALUES (@i, @g, @c, @x, @u, @t); ");
+            query.run({ i: ticket, g: guildId, c: categoryId, x: channelId, u: userId, t: getCurrentTimestamp() });
         } catch(error) {
             console.error(color.red('[sqlite:createNewTicket]'), error.message);
         }

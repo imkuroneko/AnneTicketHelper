@@ -7,27 +7,27 @@
 
     "template" : {
         "main_embed" : {
-            "color" : "0x03cafc",
+            "color" : "03cafc",
             "title" : "🎫 Sistema de Soporte",
             "description" : "Para abrir un ticket de soporte, selecciona en la lista de abajo la categoría mas adecuada y nuestro staff te estará atendiendo en la brevedad posible."
         },
         "new" : {
-            "color" : "0x03cafc",
+            "color" : "03cafc",
             "title" : "Bienvenido a nuestro sistema de tickets para {catname_mention}!",
-            "description" : "Por favor explayese lo mas posible por este medio y, uno de nuestros staff te estará ayudando en la brevedad.\n Si abriste este ticket por error, utiliza el siguiente comando: `{prefix_mention} delete`"
+            "description" : "Por favor explayese lo mas posible por este medio y, uno de nuestros staff te estará ayudando en la brevedad.\n Si abriste este ticket por error, utiliza el siguiente comando: `/delete`"
         },
         "closed" : {
-            "color" : "0x943737",
+            "color" : "943737",
             "title" : "📘 Ticket Cerrado",
-            "description" : "El ticket ha sido marcado como cerrado; para eliminarlo utilice el comando `{prefix_mention} delete` o, `{prefix_mention} reopen` para abrir nuevamente el ticket."
+            "description" : "El ticket ha sido marcado como cerrado; para eliminarlo utilice el comando `/delete` o, `/reopen` para abrir nuevamente el ticket."
         },
         "reopened" : {
-            "color" : "0x9ed654",
+            "color" : "9ed654",
             "title" : "📖 Ticket Reabierto",
             "description" : "El ticket ha sido abierto nuevamente por un staff."
         },
         "delete" : {
-            "color" : "0x5e3794",
+            "color" : "5e3794",
             "title" : "🗑 Ticket Culminado",
             "description" : "Este ticket será eliminado en {seconds} segundos."
         }

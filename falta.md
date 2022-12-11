@@ -8,7 +8,6 @@
 ------------------------------------
     otras cosas por terminar
 ------------------------------------
-· selectmenu / createticket
 · buttons / cerrar
 · buttons / eliminar
 · buttons / reabrir
