@@ -69,11 +69,11 @@ module.exports = {
         try {
             const query = sql.prepare(" SELECT ticket, user, category FROM tickets_details WHERE guild = ? AND channel = ? ");
             const data = query.get(guildId, channelId);
-            return [
-                ticket = data.ticket.toString().padStart(5, '0'),
-                user = data.user.toString(),
-                category = data.category.toString()
-            ];
+            return {
+                ticket: data.ticket,
+                user: data.user.toString(),
+                category: data.category.toString()
+            };
         } catch(error) {
             console.error(color.red('[sqlite:getDataFromTicket]'), error.message);
         }
@@ -87,11 +87,20 @@ module.exports = {
                 case 'closed':  var status = 'C'; var timestamp = null; break;
                 case 'deleted': var status = 'D'; var timestamp = getCurrentTimestamp(); break;
             }
-    
-            const query = sql.prepare(" UPDATE tickets_details SET status = @sts WHERE guild = @gld AND channel = @chn; ");
+
+            const query = sql.prepare(" UPDATE tickets_details SET status = @sts, timestamp_deletion = @tms WHERE guild = @gld AND channel = @chn; ");
             query.run({ gld: guildId, chn: channelId, sts: status, tms: timestamp });
         } catch(error) {
             console.error(color.red('[sqlite:updateStatus]'), error.message);
+        }
+    },
+
+    getTicketsMemberLeft: (guildId, userId) => {
+        try {
+            const query = sql.prepare(" SELECT category, channel FROM tickets_details WHERE guild = @gld AND user = @usr AND status != 'D'; ");
+            return query.all({ gld: guildId, usr: userId });
+        } catch(error) {
+            console.error(color.red('[sqlite:getTicketsMemberLeft]'), error.message);
         }
     },
 

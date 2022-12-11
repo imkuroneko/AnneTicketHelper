@@ -14,25 +14,24 @@ const sqlite = require(path.resolve('./functions/sqlite.js'));
 // Module script ===========================================================================================================
 module.exports = {
     name: 'createTicket',
-    async execute(interaction) {        
+    async execute(interaction) {
         try {
             const userId   = interaction.user.id;
             const guildId  = interaction.guildId;
             const optionId = (interaction.values[0]).replace('createTicket;', '');
 
+            await interaction.deferUpdate();
+            await wait(350);
+            await interaction.editReply({ content: '', ephemeral: true });
+            await wait(250);
+
             const catInfo = await sqlite.readCategory(optionId);
             if(typeof catInfo == 'undefined') {
-                return interaction.reply({
+                return await interaction.followUp({
                     content: 'No se pudo crear el ticket porque esta categoría no existe!',
                     ephemeral: true
                 });
             }
-
-            await interaction.deferUpdate();
-
-            await wait(750);
-
-            await interaction.editReply({ content: '', ephemeral: true });
 
             const total_open = await sqlite.countOpenTicketsByUser(guildId, catInfo.category, userId);
             if(total_open >= catInfo.limit_tickets) {

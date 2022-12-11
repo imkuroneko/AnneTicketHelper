@@ -55,7 +55,6 @@ try {
         client.interactionsSlash.set(command.data.name, command);
     }
 } catch(error) {
-    console.log(error);
     console.error(color.red('[load:cmds:slash]'), error.message);
 }
 

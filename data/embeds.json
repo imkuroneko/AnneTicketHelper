@@ -1,7 +1,6 @@
 {
     "footer" : {
         "url" : "https://unicodesoft.net",
-        "icon_url": "https://i.imgur.com/4IDrwRx.png",
         "text" : "🦄 by Unicodesoft | Todos los derechos reservados"
     },
 
@@ -14,12 +13,12 @@
         "new" : {
             "color" : "03cafc",
             "title" : "Bienvenido a nuestro sistema de tickets para {catname_mention}!",
-            "description" : "Por favor explayese lo mas posible por este medio y, uno de nuestros staff te estará ayudando en la brevedad.\n Si abriste este ticket por error, utiliza el siguiente comando: `/delete`"
+            "description" : "Por favor explayese lo mas posible por este medio y, uno de nuestros staff te estará ayudando en la brevedad.\n Si abriste este ticket por error, utiliza el siguiente comando: `/eliminar`"
         },
         "closed" : {
             "color" : "943737",
             "title" : "📘 Ticket Cerrado",
-            "description" : "El ticket ha sido marcado como cerrado; para eliminarlo utilice el comando `/delete` o, `/reopen` para abrir nuevamente el ticket."
+            "description" : "El ticket ha sido marcado como cerrado; para eliminarlo utilice el comando `/eliminar` o, `/reabrir` para abrir nuevamente el ticket."
         },
         "reopened" : {
             "color" : "9ed654",

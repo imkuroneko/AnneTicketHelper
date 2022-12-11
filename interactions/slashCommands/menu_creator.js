@@ -30,7 +30,7 @@ module.exports = {
             // build embed
             var fieldsContent = [];
             await validCats.forEach(async (cat) => {
-                fieldsContent.push({ name: `**${cat.emoji} ${cat.name}**`, value: cat.description });
+                fieldsContent.push({ name: `**${cat.name}**`, value: cat.description });
             });
 
             // build menu
