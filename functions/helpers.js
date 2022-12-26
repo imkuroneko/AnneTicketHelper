@@ -35,11 +35,37 @@ module.exports = {
         return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
     },
 
+    hasUnicodeEmojis: function(val) {
+        const pattern = /\p{Extended_Pictographic}/u;
+        return pattern.test(val);
+    },
+
+    hasDiscordEmojis: function(val) {
+        const pattern = /<:.+?:\d+>/g;
+        const emojis = val.match(pattern);
+        return (emojis.length > 0) ? emojis[0] : undefined;
+    },
+
+    getFirstUnicodeEmoji: function(val) {
+        const pattern = /\p{Extended_Pictographic}/u;
+        const emojis = val.match(pattern);
+        return (emojis.length > 0) ? emojis[0] : undefined;
+    },
+
+    getFirstDiscordEmoji: function(val) {
+        const pattern = /<:.+?:\d+>/g;
+        const emojis = val.match(pattern);
+        return (emojis.length > 0) ? emojis[0] : undefined;
+    },
+
+
     uid: function(len) {
         var i = 0;
         var tmp = (len || 11);
         if(!buf || ((idx + tmp) > size*2)) {
-            for(buf = '', idx = 0; i < size; i++) { buf += hex[Math.random() * 256 | 0]; }
+            for(buf = '', idx = 0; i < size; i++) {
+                buf += hex[Math.random() * 256 | 0];
+            }
         }
         return buf.substring(idx, idx++ + tmp);
     },

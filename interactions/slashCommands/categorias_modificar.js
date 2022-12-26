@@ -1,9 +1,10 @@
 // Load required resources =================================================================================================
 const path = require('path');
 const { color } = require('console-log-colors');
-const { SlashCommandBuilder, ChannelType } = require('discord.js');
+const { SlashCommandBuilder } = require('discord.js');
 
 // Load SQLite Helper ======================================================================================================
+const helpers = require(path.resolve('./functions/helpers.js'));
 const sqlite = require(path.resolve('./functions/sqlite.js'));
 
 // Module script ===========================================================================================================
@@ -25,12 +26,11 @@ module.exports = {
 
             var getCategory = await sqlite.readCategory(uid);
 
-            if(typeof getCategory == 'undefined') {
-                return interaction.reply({ content: 'No se ha encontrado una categoría con el UID indicado', ephemeral: true });
-            }
+            if(typeof getCategory == 'undefined') { return interaction.reply({ content: 'No se ha encontrado una categoría con el UID indicado', ephemeral: true }); }
 
             if(isNaN(limite)) { return interaction.reply({ content: 'El límite debe ser numérico', ephemeral: true }); }
             if(limite == 0)   { return interaction.reply({ content: 'El límite debe ser mayor a cero.', ephemeral: true }); }
+            if(helpers.hasDiscordEmojis(descripcion) || helpers.hasUnicodeEmojis(descripcion)) { return interaction.reply({ content: 'La descripción no puede contener emojis', ephemeral: true }); }
 
             await sqlite.updateCategory(uid, nombre, descripcion, limite);
 

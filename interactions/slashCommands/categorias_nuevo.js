@@ -4,6 +4,7 @@ const { color } = require('console-log-colors');
 const { SlashCommandBuilder, ChannelType } = require('discord.js');
 
 // Load SQLite Helper ======================================================================================================
+const helpers = require(path.resolve('./functions/helpers.js'));
 const sqlite = require(path.resolve('./functions/sqlite.js'));
 
 // Module script ===========================================================================================================
@@ -28,8 +29,24 @@ module.exports = {
             if(isNaN(limite)) { return interaction.reply({ content: 'El límite debe ser numérico', ephemeral: true }); }
             if(limite == 0)   { return interaction.reply({ content: 'El límite debe ser mayor a cero.', ephemeral: true }); }
 
+            if(helpers.hasDiscordEmojis(descripcion) || helpers.hasUnicodeEmojis(descripcion)) { return interaction.reply({ content: 'La descripción no puede contener emojis', ephemeral: true }); }
+            if(helpers.hasUnicodeEmojis(emoji) || helpers.hasDiscordEmojis(emoji)) { return interaction.reply({ content: 'Por favor escriba un emoji en `emoji`', ephemeral: true }); }
 
-            await sqlite.createNewCategory(nombre, categoria.id, emoji, descripcion, limite);
+            if(helpers.hasDiscordEmojis(emoji)) {
+                if(emoji.startsWith('<a:')) { return interaction.reply({ content: 'No se permiten emojis animados', ephemeral: true }); }
+
+                emote = helpers.getFirstDiscordEmoji(emoji);
+                emojiContent = emoji.replace('<:', '').replace('>', '');
+                emojiContent = emojiContent.split(':');
+
+                catEmoji = { name: emojiContent[0], id: emojiContent[1] };
+            } else if(helpers.hasUnicodeEmojis(emoji)) {
+                catEmoji = { name: helpers.getFirstUnicodeEmoji(emoji) };
+            } else {
+                catEmoji = { name: '🎫' };
+            }
+
+            await sqlite.createNewCategory(nombre, categoria.id, catEmoji, descripcion, limite);
 
             const content = `
                 Se ha creado exitosamente la nueva categoría! Recuerda deberás agregarlo manualmente en los selectores donde lo necesites.
