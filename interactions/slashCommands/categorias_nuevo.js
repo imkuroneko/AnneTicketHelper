@@ -29,7 +29,7 @@ module.exports = {
             if(limite == 0)   { return interaction.reply({ content: 'El límite debe ser mayor a cero.', ephemeral: true }); }
 
 
-            sqlite.createNewCategory(nombre, categoria.id, emoji, descripcion, limite);
+            await sqlite.createNewCategory(nombre, categoria.id, emoji, descripcion, limite);
 
             const content = `
                 Se ha creado exitosamente la nueva categoría! Recuerda deberás agregarlo manualmente en los selectores donde lo necesites.

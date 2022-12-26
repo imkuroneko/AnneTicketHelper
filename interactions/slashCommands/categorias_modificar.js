@@ -32,7 +32,7 @@ module.exports = {
             if(isNaN(limite)) { return interaction.reply({ content: 'El límite debe ser numérico', ephemeral: true }); }
             if(limite == 0)   { return interaction.reply({ content: 'El límite debe ser mayor a cero.', ephemeral: true }); }
 
-            sqlite.updateCategory(uid, nombre, descripcion, limite);
+            await sqlite.updateCategory(uid, nombre, descripcion, limite);
 
             return interaction.reply({ content: 'Se ha modificado la categoría! Recuerda deberás modificar manualmente en los selectores donde lo necesites', ephemeral: true });
         } catch(error) {

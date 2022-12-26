@@ -17,7 +17,7 @@ module.exports = {
             const validateTicket = await sqlite.isTicket(guildId, channelId);
             if(!validateTicket) { return; }
 
-            sqlite.updateStatus(guildId, channelId, 'deleted');
+            await sqlite.updateStatus(guildId, channelId, 'deleted');
         } catch(error) {
             console.error(color.red('[event:channelDelete]'), error.message);
         }

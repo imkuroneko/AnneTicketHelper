@@ -60,8 +60,8 @@ module.exports = {
                 permissionOverwrites: channelPermissions
             };
 
-            interaction.guild.channels.create(channelParams).then((newChannel) => {
-                sqlite.createNewTicket(newTicketId, guildId, catInfo.category, newChannel.id, userId);
+            interaction.guild.channels.create(channelParams).then(async (newChannel) => {
+                await sqlite.createNewTicket(newTicketId, guildId, catInfo.category, newChannel.id, userId);
 
                 interaction.followUp({ content: `🎫 Tu ticket se ha creado, para ir a este haz clic aquí: <#${newChannel.id}>`, ephemeral: true });
 

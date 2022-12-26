@@ -28,7 +28,7 @@ module.exports = {
                 return interaction.reply({ content: 'No se puede eliminar esta categoría porque aún hay tickets (nuevos/abiertos/cerrados)', ephemeral: true });
             }
 
-            sqlite.deleteCategory(uid);
+            await sqlite.deleteCategory(uid);
             return interaction.reply({ content: 'Se ha eliminado la categoría! Recuerda deberás modificar manualmente en los selectores donde lo necesites', ephemeral: true });
         } catch(error) {
             console.error(color.red('[interaction:slashcmd:cateliminar]'), error.message);

@@ -1,10 +1,6 @@
 // Load required resources =================================================================================================
 const { color } = require('console-log-colors');
-const { Events, ButtonBuilder, ActionRowBuilder, ButtonStyle } = require('discord.js');
-const path = require('path');
-
-// Load SQLite Helper ======================================================================================================
-const sqlite = require(path.resolve('./functions/sqlite.js'));
+const { Events } = require('discord.js');
 
 // Module script ===========================================================================================================
 module.exports = {
