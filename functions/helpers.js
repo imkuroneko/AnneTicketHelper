@@ -37,19 +37,20 @@ module.exports = {
 
     hasUnicodeEmojis: function(val) {
         const pattern = /\p{Extended_Pictographic}/u;
-        return pattern.test(val);
+        const emojis = pattern.test(val);
+        return emojis;
     },
 
     hasDiscordEmojis: function(val) {
         const pattern = /<:.+?:\d+>/g;
-        const emojis = val.match(pattern);
-        return (emojis.length > 0) ? emojis[0] : undefined;
+        const emojis = pattern.test(val);
+        return emojis;
     },
 
     getFirstUnicodeEmoji: function(val) {
         const pattern = /\p{Extended_Pictographic}/u;
         const emojis = val.match(pattern);
-        return (emojis.length > 0) ? emojis[0] : undefined;
+        return (emojis && emojis.length > 0) ? emojis[0] : undefined;
     },
 
     getFirstDiscordEmoji: function(val) {
