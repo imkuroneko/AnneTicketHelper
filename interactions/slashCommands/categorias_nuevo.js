@@ -30,8 +30,10 @@ module.exports = {
             if(limite == 0)   { return interaction.reply({ content: 'El límite debe ser mayor a cero.', ephemeral: true }); }
 
             if(helpers.hasDiscordEmojis(descripcion) || helpers.hasUnicodeEmojis(descripcion)) { return interaction.reply({ content: 'La descripción no puede contener emojis', ephemeral: true }); }
-            if(helpers.hasUnicodeEmojis(emoji) || helpers.hasDiscordEmojis(emoji)) { return interaction.reply({ content: 'Por favor escriba un emoji en `emoji`', ephemeral: true }); }
 
+            if(!helpers.hasUnicodeEmojis(emoji) && !helpers.hasDiscordEmojis(emoji)) { return interaction.reply({ content: 'Por favor escriba un emoji en el campo **emoji**', ephemeral: true }); }
+
+            // revisar esto
             if(helpers.hasDiscordEmojis(emoji)) {
                 if(emoji.startsWith('<a:')) { return interaction.reply({ content: 'No se permiten emojis animados', ephemeral: true }); }
 
@@ -39,11 +41,11 @@ module.exports = {
                 emojiContent = emoji.replace('<:', '').replace('>', '');
                 emojiContent = emojiContent.split(':');
 
-                catEmoji = { name: emojiContent[0], id: emojiContent[1] };
+                catEmoji = JSON.stringify({ name: emojiContent[0], id: emojiContent[1] });
             } else if(helpers.hasUnicodeEmojis(emoji)) {
-                catEmoji = { name: helpers.getFirstUnicodeEmoji(emoji) };
+                catEmoji = JSON.stringify({ name: helpers.getFirstUnicodeEmoji(emoji) });
             } else {
-                catEmoji = { name: '🎫' };
+                catEmoji = JSON.stringify({ name: '🎫' });
             }
 
             await sqlite.createNewCategory(nombre, categoria.id, catEmoji, descripcion, limite);
@@ -56,9 +58,11 @@ module.exports = {
                 **Descripción:**
                 \`\`\`${descripcion}\`\`\`
                 **Emoji:**
-                \`\`\`${emoji}\`\`\`
+                \`\`\`${catEmoji}\`\`\`
                 **Categoría:**
-                \`\`\`${categoria.name}\`\`\`
+                \`\`\`${categoria.name} (${categoria.id})\`\`\`
+                **Limite:**
+                \`\`\`${limite}\`\`\`
             `;
 
             return interaction.reply({ embeds: [{ color: 0x4f30b3, description: content, }], ephemeral: true });
