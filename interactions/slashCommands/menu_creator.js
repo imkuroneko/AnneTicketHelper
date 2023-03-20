@@ -29,21 +29,23 @@ module.exports = {
 
             // build embed
             var fieldsContent = [];
-            await validCats.forEach(async (cat) => {
+            validCats.forEach(async (cat) => {
                 fieldsContent.push({ name: `**${cat.name}**`, value: cat.description });
             });
 
             // build menu
             var selectOptions = [];
-            await validCats.forEach(async (cat) => {
-                if(cat.emoji.includes('<:')) {
-                    emojiInfo = (cat.emoji.replace('<:', '').replace('>', '')).split(':');
-                    emojiInfo = { name: emojiInfo[0], id: emojiInfo[1] };
+            validCats.forEach(async (cat) => {
+                let emojiRecovered = JSON.parse(cat.emoji);
+
+                if(emojiRecovered.length == 1) {
+                    emoji = emojiRecovered.name;
                 } else {
-                    emojiInfo = { name: cat.emoji };
+                    emoji = emojiRecovered;
                 }
 
-                selectOptions.push({ label: cat.name, value: 'createTicket;'+cat.uid, emoji: emojiInfo });
+                var optionAdd = { label: cat.name, value: 'createTicket;'+cat.uid, emoji: emoji };
+                selectOptions.push(optionAdd);
             });
 
             const menu = new ActionRowBuilder().addComponents(
