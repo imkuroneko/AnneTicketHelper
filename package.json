@@ -1,0 +1,38 @@
+{
+  "name": "annetickethelper",
+  "version": "2.0.1",
+  "description": "🎫 Sistema de tickets de soporte para discord",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./index.js",
+    "build": "npm i"
+  },
+  "keywords": [
+    "tickettool",
+    "ticket",
+    "discordbot",
+    "discord",
+    "discord.js",
+    "sqlite"
+  ],
+  "author": "KuroNeko",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/imkuroneko/AnneTicketHelper/issues"
+  },
+  "homepage": "https://github.com/imkuroneko/AnneTicketHelper#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/imkuroneko/AnneTicketHelper.git"
+  },
+  "dependencies": {
+    "@discordjs/rest": "^1.7.1",
+    "better-sqlite3": "^8.5.0",
+    "console-log-colors": "^0.4.0",
+    "cpu-stat": "^2.0.1",
+    "dayjs": "^1.11.9",
+    "discord.js": "^14.12.1",
+    "md5": "^2.3.0",
+    "os": "^0.1.2"
+  }
+}

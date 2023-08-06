@@ -1,0 +1,35 @@
+{
+    "footer" : {
+        "url" : "https://unicodesoft.net",
+        "text" : "🦄 by Unicodesoft | Todos los derechos reservados"
+    },
+
+    "template" : {
+        "main_embed" : {
+            "color" : "03cafc",
+            "title" : "🎫 Sistema de Soporte",
+            "description" : "Para abrir un ticket de soporte, selecciona en la lista de abajo la categoría mas adecuada y nuestro staff te estará atendiendo en la brevedad posible."
+        },
+        "new" : {
+            "color" : "03cafc",
+            "title" : "Bienvenido a nuestro sistema de tickets para {catname_mention}!",
+            "description" : "Por favor explayese lo mas posible por este medio y, uno de nuestros staff te estará ayudando en la brevedad.\n Si abriste este ticket por error, utiliza el siguiente comando: `/eliminar`"
+        },
+        "closed" : {
+            "color" : "943737",
+            "title" : "📘 Ticket Cerrado",
+            "description" : "El ticket ha sido marcado como cerrado; para eliminarlo utilice el comando `/eliminar` o, `/reabrir` para abrir nuevamente el ticket."
+        },
+        "reopened" : {
+            "color" : "9ed654",
+            "title" : "📖 Ticket Reabierto",
+            "description" : "El ticket ha sido abierto nuevamente por un staff."
+        },
+        "delete" : {
+            "color" : "5e3794",
+            "title" : "🗑 Ticket Culminado",
+            "description" : "Este ticket será eliminado en {seconds} segundos."
+        }
+    }
+
+}
