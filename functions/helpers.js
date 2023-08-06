@@ -59,7 +59,6 @@ module.exports = {
         return (emojis.length > 0) ? emojis[0] : undefined;
     },
 
-
     uid: function(len) {
         var i = 0;
         var tmp = (len || 11);
@@ -69,5 +68,10 @@ module.exports = {
             }
         }
         return buf.substring(idx, idx++ + tmp);
+    },
+
+    validateHexColor: function(color) {
+        var reg=/^([0-9a-f]{3}){1,2}$/i;
+        return reg.test(color);
     },
 };

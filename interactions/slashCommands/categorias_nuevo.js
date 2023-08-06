@@ -33,12 +33,12 @@ module.exports = {
 
             if(!helpers.hasUnicodeEmojis(emoji) && !helpers.hasDiscordEmojis(emoji)) { return interaction.reply({ content: 'Por favor escriba un emoji en el campo **emoji**', ephemeral: true }); }
 
-            // revisar esto
             if(helpers.hasDiscordEmojis(emoji)) {
                 if(emoji.startsWith('<a:')) { return interaction.reply({ content: 'No se permiten emojis animados', ephemeral: true }); }
 
                 emote = helpers.getFirstDiscordEmoji(emoji);
-                emojiContent = emoji.replace('<:', '').replace('>', '');
+                emojiContent = emoji.replace('<:', '');
+                emojiContent = emojiContent.replace('>', '');
                 emojiContent = emojiContent.split(':');
 
                 catEmoji = JSON.stringify({ name: emojiContent[0], id: emojiContent[1] });
@@ -50,22 +50,20 @@ module.exports = {
 
             await sqlite.createNewCategory(nombre, categoria.id, catEmoji, descripcion, limite);
 
-            const content = `
-                Se ha creado exitosamente la nueva categoría! Recuerda deberás agregarlo manualmente en los selectores donde lo necesites.
-
-                **Nombre de la categoría:**
-                \`\`\`${nombre}\`\`\`
-                **Descripción:**
-                \`\`\`${descripcion}\`\`\`
-                **Emoji:**
-                \`\`\`${catEmoji}\`\`\`
-                **Categoría:**
-                \`\`\`${categoria.name} (${categoria.id})\`\`\`
-                **Limite:**
-                \`\`\`${limite}\`\`\`
-            `;
-
-            return interaction.reply({ embeds: [{ color: 0x4f30b3, description: content, }], ephemeral: true });
+            return interaction.reply({
+                embeds: [{
+                        color: 0x4f30b3,
+                        title: 'Nueva categoría creada',
+                        fields: [
+                            { name: 'Nombre', value: nombre, inline: true },
+                            { name: 'Emoji', value: emoji, inline: true },
+                            { name: 'Limite Tickets', value: limite, inline: true },
+                            { name: 'Descripción', value: descripcion, inline: false },
+                            { name: 'Categoria', value: categoria.name+' ('+categoria.id+')', inline: false },
+                        ]
+                }],
+                ephemeral: true
+            });
         } catch(error) {
             console.error(color.red('[interaction:slashcmd:catnuevo]'), error.message);
         }

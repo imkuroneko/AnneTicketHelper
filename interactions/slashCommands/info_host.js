@@ -19,12 +19,12 @@ module.exports = {
             cpuStat.usagePercent(function (e, percent, seconds) {
                 return interaction.reply({ embeds: [{
                     color: 0x62d1f0,
-                    title: '💻 Información del servidor del bot',
+                    title: '💻 Información del VPS',
                     fields: [
-                        { inline: true, name: '⌚ Uptime', value: "```"+helpers.duration(interaction.client.uptime)+"```" },
-                        { inline: false, name: '💻 Sistema Operativo', value: "```"+os.platform()+" ("+os.arch()+")```" },
-                        { inline: true, name: '🧮 Consumo Memoria', value: "```"+(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)+" de "+(os.totalmem() / 1024 / 1024).toFixed(2)+"Mb```" },
-                        { inline: true, name: '🤖 Consumo CPU', value: "```"+percent.toFixed(2)+"%```" },
+                        { inline: false, name: '💻 S.O.', value: "```"+os.platform()+" ("+os.arch()+")```" },
+                        { inline: true, name: '⌚ Uptime', value: "```"+helpers.duration(os.uptime())+"```" },
+                        { inline: true, name: '🧮 Memoria', value: "```"+((os.totalmem() - os.freemem()) / 1024 / 1024).toFixed(2)+" de "+(os.totalmem() / 1024 / 1024).toFixed(2)+"Mb```" },
+                        { inline: true, name: '🤖 CPU', value: "```"+percent.toFixed(2)+"%```" },
                     ],
                     footer: { text: 'Developed by KuroNeko#0001' }
                 }] });
