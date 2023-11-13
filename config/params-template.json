@@ -1,0 +1,14 @@
+{
+    "clientId"           : "",
+    "token"              : "",
+
+    "ownerId"            : "",
+
+    "prefix"             : "$",
+    
+    "serverTimezone"     : "America/Asuncion",
+
+    "staffRole"          : "",
+    "secDelTicket"       : 10,
+    "deleteTicketOnLeft" : true
+}
