@@ -1,14 +1,14 @@
 {
-    "clientId"           : "",
-    "token"              : "",
+    "clientId"           : "1154250419976032347",
+    "token"              : "MTE1NDI1MDQxOTk3NjAzMjM0Nw.Gho6Yv.rdC6h9E0G4UaL6O34Cmqx9MeJElzkGFuDXO40E",
 
-    "ownerId"            : "",
+    "ownerId"            : "377052236909379585",
 
     "prefix"             : "$",
     
-    "serverTimezone"     : "",
+    "serverTimezone"     : "America/Asuncion",
 
-    "staffRole"          : "",
+    "staffRole"          : "956770524300709898",
     "secDelTicket"       : 10,
     "deleteTicketOnLeft" : true
 }

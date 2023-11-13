@@ -12,4 +12,4 @@ currently being supported with security updates.
 
 ## Reporting a Vulnerability
 
-Discord: `KuroNeko#0001`
+Discord: `@imkuroneko`

@@ -10,7 +10,7 @@ const sqlite = require(path.resolve('./functions/sqlite.js'));
 // Module script ===========================================================================================================
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('menucreator')
+        .setName('menu')
         .setDescription('Crear menú de soporte')
         .addStringOption(option => option.setName('categorias').setDescription('UIDs de las categorías separados entre comas "," (ej: 1,2,3,4)').setRequired(true).setMinLength(3))
         .setDMPermission(false),

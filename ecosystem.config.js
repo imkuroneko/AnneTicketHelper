@@ -1,6 +1,7 @@
 module.exports = {
     apps : [{
         name : "AyamiTicketHelper",
+        version: "3.0.1",
         script : "./index.js",
 
         watch : true,

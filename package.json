@@ -1,6 +1,6 @@
 {
-  "name": "annetickethelper",
-  "version": "2.0.1",
+  "name": "ayamitickethelper",
+  "version": "3.0.1",
   "description": "🎫 Sistema de tickets de soporte para discord",
   "main": "index.js",
   "scripts": {
@@ -18,20 +18,20 @@
   "author": "KuroNeko",
   "license": "GPL-3.0",
   "bugs": {
-    "url": "https://github.com/imkuroneko/AnneTicketHelper/issues"
+    "url": "https://github.com/imkuroneko/AyamiTicketHelper/issues"
   },
-  "homepage": "https://github.com/imkuroneko/AnneTicketHelper#readme",
+  "homepage": "https://github.com/imkuroneko/AyamiTicketHelper#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/imkuroneko/AnneTicketHelper.git"
+    "url": "git+https://github.com/imkuroneko/AyamiTicketHelper.git"
   },
   "dependencies": {
     "@discordjs/rest": "^1.7.1",
-    "better-sqlite3": "^8.6.0",
+    "better-sqlite3": "^8.7.0",
     "console-log-colors": "^0.4.0",
     "cpu-stat": "^2.0.1",
     "dayjs": "^1.11.10",
-    "discord.js": "^14.13.0",
+    "discord.js": "^14.14.1",
     "md5": "^2.3.0",
     "os": "^0.1.2"
   }
