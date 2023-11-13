@@ -8,17 +8,18 @@
         "main_embed" : {
             "color" : "03cafc",
             "title" : "🎫 Sistema de Soporte",
-            "description" : "Para abrir un ticket de soporte, selecciona en la lista de abajo la categoría mas adecuada y nuestro staff te estará atendiendo en la brevedad posible."
+            "description" : "Para abrir un ticket de soporte, selecciona en la categoría mas adecuada y nuestro staff le estará atendiendo en la brevedad posible."
         },
         "new" : {
             "color" : "03cafc",
-            "title" : "Bienvenido a nuestro sistema de tickets para {catname_mention}!",
-            "description" : "Por favor explayese lo mas posible por este medio y, uno de nuestros staff te estará ayudando en la brevedad.\n Si abriste este ticket por error, utiliza el siguiente comando: `/eliminar`"
+            "title" : "🎫 Nuevo ticket creado",
+            "message" : "Hola {user}! Aquí se encuentra tu ticket de soporte",
+            "description" : "Por favor explayese lo mas posible por este medio y, uno de nuestros staff te estará ayudando en la brevedad.\n\n**Usuario:**```{user_tag}```\n**Categoría Ticket:**```{catname_mention}```"
         },
         "closed" : {
             "color" : "943737",
             "title" : "📘 Ticket Cerrado",
-            "description" : "El ticket ha sido marcado como cerrado; para eliminarlo utilice el comando `/eliminar` o, `/reabrir` para abrir nuevamente el ticket."
+            "description" : "El ticket ha sido marcado como cerrado.\nPara eliminarlo utilice el comando `/ticket eliminar` o, `/ticket reabrir` para abrir nuevamente el ticket."
         },
         "reopened" : {
             "color" : "9ed654",
@@ -31,5 +32,4 @@
             "description" : "Este ticket será eliminado en {seconds} segundos."
         }
     }
-
 }

@@ -17,6 +17,7 @@ module.exports = {
     async execute(interaction) {
         try {
             const userId   = interaction.user.id;
+            const userTag  = interaction.user.tag;
             const guildId  = interaction.guildId;
             const optionId = (interaction.values[0]).replace('createTicket;', '');
 
@@ -68,15 +69,15 @@ module.exports = {
                 const embed_welcome = {
                     color: parseInt(template.new.color, 16),
                     title: template.new.title.replaceAll('{catname_mention}', catInfo.name),
-                    description: template.new.description,
-                    footer: footer
+                    description: template.new.description.replaceAll('{user_tag}', userTag).replaceAll('{catname_mention}', catInfo.name),
+                    footer: footer 
                 };
 
                 const btns_ticket = new ActionRowBuilder().addComponents(
                     new ButtonBuilder().setCustomId(`closeTicket;${newChannel.id}`).setLabel('Cerrar Ticket').setStyle(ButtonStyle.Danger),
                 );
 
-                newChannel.send({ content: `Hola <@${userId}>!`, embeds: [ embed_welcome ], components: [ btns_ticket ] });
+                newChannel.send({ content: template.new.message.replaceAll('{user}', `<@${userId}>`), embeds: [ embed_welcome ], components: [ btns_ticket ] });
             }).catch((error) => {
                 console.error(color.red('[interaction:selectmenu:createticket:createticket]'), error.message);
             });
