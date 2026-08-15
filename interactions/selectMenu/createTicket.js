@@ -9,7 +9,7 @@ const { clientId, staffRole } = require(path.resolve('./config/params.json'));
 const { template, footer } = require(path.resolve('./data/embeds.json'));
 
 // Load SQLite Helper ======================================================================================================
-const sqlite = require(path.resolve('./functions/sqlite.js'));
+const { readCategory, countOpenTicketsByUser, generateTicketId, createNewTicket } = require(path.resolve('./functions/sqlite.js'));
 
 // Module script ===========================================================================================================
 module.exports = {
@@ -26,7 +26,7 @@ module.exports = {
             await interaction.editReply({ content: '', ephemeral: true });
             await wait(250);
 
-            const catInfo = await sqlite.readCategory(optionId);
+            const catInfo = await readCategory(optionId);
             if(typeof catInfo == 'undefined') {
                 return await interaction.followUp({
                     content: 'No se pudo crear el ticket porque esta categoría no existe!',
@@ -34,7 +34,7 @@ module.exports = {
                 });
             }
 
-            const total_open = await sqlite.countOpenTicketsByUser(guildId, catInfo.category, userId);
+            const total_open = await countOpenTicketsByUser(guildId, catInfo.category, userId);
             if(total_open >= catInfo.limit_tickets) {
                 return await interaction.followUp({
                     content: '🎫 No puedes crear un ticket nuevo porque has alcanzado el límite de tickets abiertos en esta categoría',
@@ -52,7 +52,7 @@ module.exports = {
                 channelPermissions.push({ id: staffRole, allow: [ 'ViewChannel', 'ReadMessageHistory', 'SendMessages' ] });
             }
 
-            const newTicketId = await sqlite.generateTicketId(guildId, catInfo.category);
+            const newTicketId = await generateTicketId(guildId, catInfo.category);
 
             const channelParams = {
                 name: `ticket-${newTicketId}`,
@@ -62,7 +62,7 @@ module.exports = {
             };
 
             interaction.guild.channels.create(channelParams).then(async (newChannel) => {
-                await sqlite.createNewTicket(newTicketId, guildId, catInfo.category, newChannel.id, userId);
+                await createNewTicket(newTicketId, guildId, catInfo.category, newChannel.id, userId);
 
                 interaction.followUp({ content: `🎫 Tu ticket se ha creado, para ir a este haz clic aquí: <#${newChannel.id}>`, ephemeral: true });
 

@@ -5,7 +5,7 @@ const { color } = require('console-log-colors');
 const { SlashCommandBuilder, ActionRowBuilder, StringSelectMenuBuilder } = require('discord.js');
 
 // Load SQLite Helper ======================================================================================================
-const sqlite = require(path.resolve('./functions/sqlite.js'));
+const { readCategory } = require(path.resolve('./functions/sqlite.js'));
 
 // Module script ===========================================================================================================
 module.exports = {
@@ -23,7 +23,7 @@ module.exports = {
             // validate categories
             var validCats = [];
             await catsAsObj.forEach(async (cat) => {
-                var catInfo = await sqlite.readCategory(cat.trim());
+                var catInfo = await readCategory(cat.trim());
                 if(typeof catInfo != 'undefined') { validCats.push(catInfo); }
             });
 

@@ -8,7 +8,7 @@ const { secDelTicket } = require(path.resolve('./config/params.json'));
 const { template } = require(path.resolve('./data/embeds.json'));
 
 // Load SQLite Helper ======================================================================================================
-const sqlite = require(path.resolve('./functions/sqlite.js'));
+const { isTicket, getDataFromTicket, updateStatus } = require(path.resolve('./functions/sqlite.js'));
 
 // Module script ===========================================================================================================
 module.exports = {
@@ -18,12 +18,12 @@ module.exports = {
             const guildId  = interaction.guildId;
             const optionId = (interaction.customId).replace('deleteTicket;', '');
 
-            const validateTicket = await sqlite.isTicket(guildId, optionId);
+            const validateTicket = await isTicket(guildId, optionId);
             if(!validateTicket) {
                 return interaction.reply({ content: 'Este canal no es un ticket', ephemeral: true });
             }
 
-            const ticketInfo = await sqlite.getDataFromTicket(guildId, optionId);
+            const ticketInfo = await getDataFromTicket(guildId, optionId);
             if(typeof ticketInfo == 'undefined') {
                 return interaction.reply({
                     content: 'No se pudo obtener detalles del ticket porque no se encuentra registrado',
@@ -41,7 +41,7 @@ module.exports = {
 
             await wait(secDelTicket * 1000);
 
-            await sqlite.updateStatus(guildId, optionId, 'deleted');
+            await updateStatus(guildId, optionId, 'deleted');
 
             const channelDel = await interaction.guild.channels.cache.get(optionId);
             channelDel.delete();

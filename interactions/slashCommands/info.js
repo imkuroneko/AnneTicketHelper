@@ -4,8 +4,7 @@ const { SlashCommandBuilder } = require('discord.js');
 const { color } = require('console-log-colors');
 
 // Load Functions ==========================================================================================================
-const sqlite = require(path.resolve('./functions/sqlite.js'));
-const helpers = require(path.resolve('./functions/helpers.js'));
+const {countTotalCategories, countTotalTicketsGlobal, countTotalTicketsOpen, countTotalTicketsClosed, countTotalTicketsDeleted } = require(path.resolve('./functions/sqlite.js'));
 
 // Module script ===========================================================================================================
 module.exports = {
@@ -15,11 +14,11 @@ module.exports = {
         .setDMPermission(false),
     async execute(interaction) {
         try {
-            const totalCategories = await sqlite.countTotalCategories();
-            const totalTicketsGlobal = await sqlite.countTotalTicketsGlobal();
-            const totalTicketsOpen = await sqlite.countTotalTicketsOpen();
-            const totalTicketsClosed = await sqlite.countTotalTicketsClosed();
-            const totalTicketsDeleted = await sqlite.countTotalTicketsDeleted();
+            const totalCategories = await countTotalCategories();
+            const totalTicketsGlobal = await countTotalTicketsGlobal();
+            const totalTicketsOpen = await countTotalTicketsOpen();
+            const totalTicketsClosed = await countTotalTicketsClosed();
+            const totalTicketsDeleted = await countTotalTicketsDeleted();
 
             return interaction.reply({ embeds: [{
                     color: 0x62d1f0,

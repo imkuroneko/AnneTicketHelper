@@ -4,8 +4,8 @@ const { color } = require('console-log-colors');
 const { SlashCommandBuilder, ChannelType } = require('discord.js');
 
 // Load Functions ==========================================================================================================
-const helpers = require(path.resolve('./functions/helpers.js'));
-const sqlite = require(path.resolve('./functions/sqlite.js'));
+const { hasDiscordEmojis, hasUnicodeEmojis, getFirstDiscordEmoji, getFirstUnicodeEmoji } = require(path.resolve('./functions/helpers.js'));
+const { listCategories, createNewCategory, readCategory, updateCategory, readCategory, countTicketsOnCategory, deleteCategory } = require(path.resolve('./functions/sqlite.js'));
 
 // Module script ===========================================================================================================
 module.exports = {
@@ -57,7 +57,7 @@ module.exports = {
 
             // listar categorias
             if(cmd == 'listar') {
-                const categorias = await sqlite.listCategories();
+                const categorias = await listCategories();
 
                 var fields = [];
                 categorias.forEach((cat) => {
@@ -81,26 +81,26 @@ module.exports = {
                 if(isNaN(limite)) { return interaction.reply({ content: 'El límite debe ser numérico', ephemeral: true }); }
                 if(limite == 0)   { return interaction.reply({ content: 'El límite debe ser mayor a cero.', ephemeral: true }); }
 
-                if(helpers.hasDiscordEmojis(descripcion) || helpers.hasUnicodeEmojis(descripcion)) { return interaction.reply({ content: 'La descripción no puede contener emojis', ephemeral: true }); }
+                if(hasDiscordEmojis(descripcion) || hasUnicodeEmojis(descripcion)) { return interaction.reply({ content: 'La descripción no puede contener emojis', ephemeral: true }); }
 
-                if(!helpers.hasUnicodeEmojis(emoji) && !helpers.hasDiscordEmojis(emoji)) { return interaction.reply({ content: 'Por favor escriba un emoji en el campo **emoji**', ephemeral: true }); }
+                if(!hasUnicodeEmojis(emoji) && !hasDiscordEmojis(emoji)) { return interaction.reply({ content: 'Por favor escriba un emoji en el campo **emoji**', ephemeral: true }); }
 
-                if(helpers.hasDiscordEmojis(emoji)) {
+                if(hasDiscordEmojis(emoji)) {
                     if(emoji.startsWith('<a:')) { return interaction.reply({ content: 'No se permiten emojis animados', ephemeral: true }); }
-    
-                    emote = helpers.getFirstDiscordEmoji(emoji);
+
+                    emote = getFirstDiscordEmoji(emoji);
                     emojiContent = emoji.replace('<:', '');
                     emojiContent = emojiContent.replace('>', '');
                     emojiContent = emojiContent.split(':');
-    
+
                     catEmoji = JSON.stringify({ name: emojiContent[0], id: emojiContent[1] });
-                } else if(helpers.hasUnicodeEmojis(emoji)) {
-                    catEmoji = JSON.stringify({ name: helpers.getFirstUnicodeEmoji(emoji) });
+                } else if(hasUnicodeEmojis(emoji)) {
+                    catEmoji = JSON.stringify({ name: getFirstUnicodeEmoji(emoji) });
                 } else {
                     catEmoji = JSON.stringify({ name: '🎫' });
                 }
 
-                await sqlite.createNewCategory(nombre, categoria.id, catEmoji, descripcion, limite);
+                await createNewCategory(nombre, categoria.id, catEmoji, descripcion, limite);
 
                 return interaction.reply({
                     embeds: [{
@@ -125,7 +125,7 @@ module.exports = {
                 const descripcion = interaction.options.getString('descripcion');
                 const limite = interaction.options.getInteger('limite');
 
-                var getCategory = await sqlite.readCategory(uid);
+                var getCategory = await readCategory(uid);
 
                 if(typeof getCategory == 'undefined') {
                     return interaction.reply({ content: 'No se ha encontrado una categoría con el UID indicado', ephemeral: true });
@@ -133,9 +133,9 @@ module.exports = {
 
                 if(isNaN(limite)) { return interaction.reply({ content: 'El límite debe ser numérico', ephemeral: true }); }
                 if(limite == 0)   { return interaction.reply({ content: 'El límite debe ser mayor a cero.', ephemeral: true }); }
-                if(helpers.hasDiscordEmojis(descripcion) || helpers.hasUnicodeEmojis(descripcion)) { return interaction.reply({ content: 'La descripción no puede contener emojis', ephemeral: true }); }
+                if(hasDiscordEmojis(descripcion) || hasUnicodeEmojis(descripcion)) { return interaction.reply({ content: 'La descripción no puede contener emojis', ephemeral: true }); }
 
-                await sqlite.updateCategory(uid, nombre, descripcion, limite);
+                await updateCategory(uid, nombre, descripcion, limite);
 
                 return interaction.reply({ content: 'Se ha modificado la categoría! Recuerda deberás modificar manualmente en los selectores donde lo necesites', ephemeral: true });
             }
@@ -144,18 +144,18 @@ module.exports = {
             if(cmd == 'eliminar') {
                 const uid = interaction.options.getString('uid');
 
-                var getCategory = await sqlite.readCategory(uid);
+                var getCategory = await readCategory(uid);
 
                 if(typeof getCategory == 'undefined') {
                     return interaction.reply({ content: 'No se ha encontrado una categoría con el UID indicado', ephemeral: true });
                 }
 
-                var ticketsOnCat = await sqlite.countTicketsOnCategory(uid);
+                var ticketsOnCat = await countTicketsOnCategory(uid);
                 if(ticketsOnCat > 0) {
                     return interaction.reply({ content: 'No se puede eliminar esta categoría porque aún hay tickets (nuevos/abiertos/cerrados)', ephemeral: true });
                 }
 
-                await sqlite.deleteCategory(uid);
+                await deleteCategory(uid);
                 return interaction.reply({ content: 'Se ha eliminado la categoría! Recuerda deberás modificar manualmente en los selectores donde lo necesites', ephemeral: true });
             }
 

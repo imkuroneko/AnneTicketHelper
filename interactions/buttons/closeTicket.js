@@ -8,7 +8,7 @@ const { clientId, staffRole } = require(path.resolve('./config/params.json'));
 const { template } = require(path.resolve('./data/embeds.json'));
 
 // Load SQLite Helper ======================================================================================================
-const sqlite = require(path.resolve('./functions/sqlite.js'));
+const { isTicket, getDataFromTicket, updateStatus } = require(path.resolve('./functions/sqlite.js'));
 
 // Module script ===========================================================================================================
 module.exports = {
@@ -18,12 +18,12 @@ module.exports = {
             const guildId  = interaction.guildId;
             const optionId = (interaction.customId).replace('closeTicket;', '');
 
-            const validateTicket = await sqlite.isTicket(guildId, optionId);
+            const validateTicket = await isTicket(guildId, optionId);
             if(!validateTicket) {
                 return interaction.reply({ content: 'Este canal no es un ticket', ephemeral: true });
             }
 
-            const ticketInfo = await sqlite.getDataFromTicket(guildId, optionId);
+            const ticketInfo = await getDataFromTicket(guildId, optionId);
             if(typeof ticketInfo == 'undefined') {
                 return interaction.reply({
                     content: 'No se pudo obtener detalles del ticket porque no se encuentra registrado',
@@ -44,7 +44,7 @@ module.exports = {
 
             interaction.reply({ embeds: embed, components: [ btns_ticket ] });
 
-            await sqlite.updateStatus(guildId, optionId, 'closed');
+            await updateStatus(guildId, optionId, 'closed');
 
             interaction.guild.channels.fetch(optionId).then( (channelEdit) => {
                 var channelPermissions = [

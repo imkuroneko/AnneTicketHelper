@@ -7,7 +7,7 @@ const path = require('path');
 const { deleteTicketOnLeft } = require(path.resolve('./config/params.json'));
 
 // Load SQLite Helper ======================================================================================================
-const sqlite = require(path.resolve('./functions/sqlite.js'))
+const { getTicketsMemberLeft } = require(path.resolve('./functions/sqlite.js'))
 
 // Module script ===========================================================================================================
 module.exports = {

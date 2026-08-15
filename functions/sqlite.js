@@ -12,7 +12,7 @@ const { serverTimezone } = require(path.resolve('./config/params.json'));
 const sql = new SQLite(path.resolve('./data/db.sqlite'));
 
 // Load custom functions ===================================================================================================
-const helpers = require(path.resolve('./functions/helpers.js'));
+const { uid } = require(path.resolve('./functions/helpers.js'));
 
 // Internal Function =======================================================================================================
 function getCurrentTimestamp() {
@@ -22,7 +22,7 @@ function getCurrentTimestamp() {
 }
 
 function genCatUID() {
-    var newUID = helpers.uid(8);
+    var newUID = uid(8);
     const query = sql.prepare(" SELECT count(*) as count FROM tickets_categories WHERE uid = ? ");
     if(query.get(newUID).count == 0) { return newUID; } else { return genCatUID(); }
 }
