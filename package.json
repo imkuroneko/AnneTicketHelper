@@ -26,13 +26,11 @@
     "url": "git+https://github.com/imkuroneko/AyamiTicketHelper.git"
   },
   "dependencies": {
-    "@discordjs/rest": "^1.7.1",
-    "better-sqlite3": "^8.7.0",
-    "console-log-colors": "^0.4.0",
-    "cpu-stat": "^2.0.1",
-    "dayjs": "^1.11.10",
-    "discord.js": "^14.14.1",
-    "md5": "^2.3.0",
-    "os": "^0.1.2"
+    "@discordjs/rest": "^2.6.3",
+    "better-sqlite3": "^13.0.3",
+    "console-log-colors": "^0.5.0",
+    "dayjs": "^1.11.21",
+    "discord.js": "^14.27.0",
+    "md5": "^2.3.0"
   }
 }

@@ -12,7 +12,6 @@ Sistema de tickets de soporte para discord (v2)
 • DiscordJS v14
 • SQLite (BetterSQLite)
 • fs (para la lectura de los ficheros necesarios)
-• os & cpu-stat (para monitoreo de recursos)
 ```
 <br>
 
