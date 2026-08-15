@@ -1,8 +1,6 @@
 // Load required resources =================================================================================================
 const { color } = require('console-log-colors');
 const { ChannelType, ButtonBuilder, ActionRowBuilder, ButtonStyle } = require('discord.js');
-const path = require('path');
-const wait = require('node:timers/promises').setTimeout;
 
 // Load configuration files ================================================================================================
 const { clientId, staffRole } = require('../../config/params.json');
@@ -13,33 +11,27 @@ const { readCategory, countOpenTicketsByUser, generateTicketId, createNewTicket 
 
 // Module script ===========================================================================================================
 module.exports = {
-    name: 'createTicket',
+    name: 'openTicketModal',
     async execute(interaction) {
         try {
-            const userId   = interaction.user.id;
-            const userTag  = interaction.user.tag;
-            const guildId  = interaction.guildId;
-            const optionId = (interaction.values[0]).replace('createTicket;', '');
+            const userId  = interaction.user.id;
+            const userTag = interaction.user.tag;
+            const guildId = interaction.guildId;
 
-            await interaction.deferUpdate();
-            await wait(350);
-            await interaction.editReply({ content: '', ephemeral: true });
-            await wait(250);
+            const categoryUid = interaction.fields.getStringSelectValues('categoria')[0];
+            const subject = interaction.fields.getTextInputValue('asunto');
+            const description = interaction.fields.getTextInputValue('descripcion');
 
-            const catInfo = await readCategory(optionId);
+            await interaction.deferReply({ ephemeral: true });
+
+            const catInfo = readCategory(categoryUid);
             if(typeof catInfo == 'undefined') {
-                return await interaction.followUp({
-                    content: 'No se pudo crear el ticket porque esta categoría no existe!',
-                    ephemeral: true
-                });
+                return interaction.editReply({ content: 'No se pudo crear el ticket porque esta categoría no existe!' });
             }
 
-            const total_open = await countOpenTicketsByUser(guildId, catInfo.category, userId);
+            const total_open = countOpenTicketsByUser(guildId, catInfo.category, userId);
             if(total_open >= catInfo.limit_tickets) {
-                return await interaction.followUp({
-                    content: '🎫 No puedes crear un ticket nuevo porque has alcanzado el límite de tickets abiertos en esta categoría',
-                    ephemeral: true
-                });
+                return interaction.editReply({ content: '🎫 No puedes crear un ticket nuevo porque has alcanzado el límite de tickets abiertos en esta categoría' });
             }
 
             var channelPermissions = [
@@ -52,7 +44,7 @@ module.exports = {
                 channelPermissions.push({ id: staffRole, allow: [ 'ViewChannel', 'ReadMessageHistory', 'SendMessages' ] });
             }
 
-            const newTicketId = await generateTicketId(guildId, catInfo.category);
+            const newTicketId = generateTicketId(guildId, catInfo.category);
 
             const channelParams = {
                 name: `ticket-${newTicketId}`,
@@ -62,15 +54,19 @@ module.exports = {
             };
 
             interaction.guild.channels.create(channelParams).then(async (newChannel) => {
-                await createNewTicket(newTicketId, guildId, catInfo.category, newChannel.id, userId);
+                createNewTicket(newTicketId, guildId, catInfo.category, newChannel.id, userId, subject, description);
 
-                interaction.followUp({ content: `🎫 Tu ticket se ha creado, para ir a este haz clic aquí: <#${newChannel.id}>`, ephemeral: true });
+                interaction.editReply({ content: `🎫 Tu ticket se ha creado, para ir a este haz clic aquí: <#${newChannel.id}>` });
 
                 const embed_welcome = {
                     color: parseInt(template.new.color, 16),
                     title: template.new.title.replaceAll('{catname_mention}', catInfo.name),
-                    description: template.new.description.replaceAll('{user_tag}', userTag).replaceAll('{catname_mention}', catInfo.name),
-                    footer: footer 
+                    description: template.new.description
+                        .replaceAll('{user_tag}', userTag)
+                        .replaceAll('{catname_mention}', catInfo.name)
+                        .replaceAll('{subject}', subject)
+                        .replaceAll('{description}', description),
+                    footer: footer
                 };
 
                 const btns_ticket = new ActionRowBuilder().addComponents(
@@ -79,10 +75,11 @@ module.exports = {
 
                 newChannel.send({ content: template.new.message.replaceAll('{user}', `<@${userId}>`), embeds: [ embed_welcome ], components: [ btns_ticket ] });
             }).catch((error) => {
-                console.error(color.red('[interaction:selectmenu:createticket:createticket]'), error.message);
+                console.error(color.red('[interaction:modals:openticketmodal:createchannel]'), error.message);
+                interaction.editReply({ content: 'Ocurrió un error al crear el canal del ticket.' });
             });
         } catch(error) {
-            console.error(color.red('[interaction:selectmenu:createticket]'), error);
+            console.error(color.red('[interaction:modals:openticketmodal]'), error);
         }
     }
 };

@@ -19,18 +19,17 @@ module.exports = {
                 }
             }
 
-            if(interaction.isStringSelectMenu()) {
+            if(interaction.isModalSubmit()) {
                 try {
-                    var optionId = interaction.values[0];
-                    var interactionName = optionId.split(';');
-                    
-                    const menuAction = interaction.client.interactionsSelectMenu.get(interactionName[0]);
-                    if(!menuAction) { return; }
+                    var modalAction = interaction.customId.split(';')[0];
 
-                    await menuAction.execute(interaction);
+                    const action = interaction.client.interactionsModals.get(modalAction);
+                    if(!action) { return; }
+
+                    await action.execute(interaction);
                 } catch(error) {
-                    console.error(color.red('event:interactionCreate:select'), error.message);
-                    return interaction.reply({ content: 'oops! hubo un error al ejecutar el evento menu 😣', ephemeral: true });
+                    console.error(color.red('event:interactionCreate:modal'), error.message);
+                    return interaction.reply({ content: 'oops! hubo un error al ejecutar el modal 😣', ephemeral: true });
                 }
             }
 

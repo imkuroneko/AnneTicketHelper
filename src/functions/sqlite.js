@@ -55,6 +55,12 @@ sql.exec(`
     CREATE INDEX IF NOT EXISTS idx_tickets_details_status ON tickets_details("status");
 `);
 
+// Schema migrations (columnas agregadas después de la versión original de la tabla) =======================================
+// ALTER TABLE ADD COLUMN no soporta IF NOT EXISTS en esta versión de SQLite, así que se chequea manualmente.
+const ticketsDetailsColumns = sql.prepare('PRAGMA table_info(tickets_details)').all().map((c) => c.name);
+if(!ticketsDetailsColumns.includes('subject'))     { sql.exec('ALTER TABLE tickets_details ADD COLUMN "subject" TEXT'); }
+if(!ticketsDetailsColumns.includes('description')) { sql.exec('ALTER TABLE tickets_details ADD COLUMN "description" TEXT'); }
+
 // Prepared statements (prepared once at module load, reused on every call) ================================================
 const stmt = {
     isTicket: sql.prepare(" SELECT count(*) as count FROM tickets_details WHERE guild = ? AND channel = ? "),
@@ -70,8 +76,8 @@ const stmt = {
         RETURNING next_number
     `),
 
-    createNewTicket: sql.prepare(" INSERT INTO tickets_details (ticket, guild, category, channel, user, timestamp_creation) VALUES (@i, @g, @c, @x, @u, @t); "),
-    getDataFromTicket: sql.prepare(" SELECT ticket, user, category FROM tickets_details WHERE guild = ? AND channel = ? "),
+    createNewTicket: sql.prepare(" INSERT INTO tickets_details (ticket, guild, category, channel, user, subject, description, timestamp_creation) VALUES (@i, @g, @c, @x, @u, @sub, @desc, @t); "),
+    getDataFromTicket: sql.prepare(" SELECT ticket, user, category, subject, description FROM tickets_details WHERE guild = ? AND channel = ? "),
     updateStatus: sql.prepare(" UPDATE tickets_details SET status = @sts, timestamp_deletion = @tms WHERE guild = @gld AND channel = @chn; "),
     getTicketsMemberLeft: sql.prepare(" SELECT category, channel FROM tickets_details WHERE guild = @gld AND user = @usr AND status != 'D'; "),
 
@@ -137,9 +143,9 @@ module.exports = {
         }
     },
 
-    createNewTicket: (ticket, guildId, categoryId, channelId, userId) => {
+    createNewTicket: (ticket, guildId, categoryId, channelId, userId, subject, description) => {
         try {
-            stmt.createNewTicket.run({ i: ticket, g: guildId, c: categoryId, x: channelId, u: userId, t: getCurrentTimestamp() });
+            stmt.createNewTicket.run({ i: ticket, g: guildId, c: categoryId, x: channelId, u: userId, sub: subject, desc: description, t: getCurrentTimestamp() });
         } catch(error) {
             console.error(color.red('[sqlite:createNewTicket]'), error.message);
         }
@@ -152,7 +158,9 @@ module.exports = {
             return {
                 ticket: data.ticket,
                 user: data.user.toString(),
-                category: data.category.toString()
+                category: data.category.toString(),
+                subject: data.subject,
+                description: data.description
             };
         } catch(error) {
             console.error(color.red('[sqlite:getDataFromTicket]'), error.message);

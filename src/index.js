@@ -71,13 +71,13 @@ try {
 }
 
 
-// [4] Interactions :: Menus ===============================================================================================
+// [4] Interactions :: Modals ==============================================================================================
 try {
-    var pathFiles = path.join(__dirname, 'interactions/selectMenu');
-    client.interactionsSelectMenu = new Collection();
+    var pathFiles = path.join(__dirname, 'interactions/modals');
+    client.interactionsModals = new Collection();
     const interactionsFiles = fs.readdirSync(path.resolve(pathFiles)).filter(file => file.endsWith('.js'));
     for(const interactionFile of interactionsFiles) {
-        client.interactionsSelectMenu.set(interactionFile.split(".")[0], require(path.resolve(path.join(pathFiles, interactionFile))));
+        client.interactionsModals.set(interactionFile.split(".")[0], require(path.resolve(path.join(pathFiles, interactionFile))));
     }
 } catch(error) {
     console.error(color.red('[load:interactions]'), error.message);

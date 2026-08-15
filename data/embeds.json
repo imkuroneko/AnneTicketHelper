@@ -14,7 +14,7 @@
             "color" : "03cafc",
             "title" : "🎫 Nuevo ticket creado",
             "message" : "Hola {user}! Aquí se encuentra tu ticket de soporte",
-            "description" : "Por favor explayese lo mas posible por este medio y, uno de nuestros staff te estará ayudando en la brevedad.\n\n**Usuario:**```{user_tag}```\n**Categoría Ticket:**```{catname_mention}```"
+            "description" : "Por favor explayese lo mas posible por este medio y, uno de nuestros staff te estará ayudando en la brevedad.\n\n**Usuario:**```{user_tag}```\n**Categoría Ticket:**```{catname_mention}```\n**Asunto:**```{subject}```\n**Descripción:**```{description}```"
         },
         "closed" : {
             "color" : "943737",
