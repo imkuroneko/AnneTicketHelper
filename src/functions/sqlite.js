@@ -1,18 +1,17 @@
 // Load required resources =================================================================================================
-const path = require('path');
 const SQLite = require('better-sqlite3');
 const dayjs = require('dayjs');
 const timezone = require('dayjs/plugin/timezone');
 const { color } = require('console-log-colors');
 
 // Load configuration files ================================================================================================
-const { serverTimezone } = require('../config/params.json');
+const { serverTimezone } = require('#config/params.json');
 
 // Load custom functions ===================================================================================================
 const { uid } = require('./helpers.js');
 
 // Database ================================================================================================================
-const sql = new SQLite(path.join(__dirname, '../../data/db.sqlite'));
+const sql = new SQLite(require.resolve('#data/db.sqlite'));
 
 sql.pragma('journal_mode = WAL');
 sql.pragma('synchronous = NORMAL');

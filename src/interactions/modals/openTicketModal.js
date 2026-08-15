@@ -3,11 +3,11 @@ const { color } = require('console-log-colors');
 const { ChannelType, ButtonBuilder, ActionRowBuilder, ButtonStyle } = require('discord.js');
 
 // Load configuration files ================================================================================================
-const { clientId, staffRole } = require('../../config/params.json');
-const { template, footer } = require('../../../data/embeds.json');
+const { clientId, staffRole } = require('#config/params.json');
+const { template, footer } = require('#data/embeds.json');
 
 // Load SQLite Helper ======================================================================================================
-const { readCategory, countOpenTicketsByUser, generateTicketId, createNewTicket } = require('../../functions/sqlite.js');
+const { readCategory, countOpenTicketsByUser, generateTicketId, createNewTicket } = require('#functions/sqlite.js');
 
 // Module script ===========================================================================================================
 module.exports = {

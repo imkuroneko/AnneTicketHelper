@@ -17,6 +17,11 @@
     "start": "node ./src/index.js",
     "build": "npm i"
   },
+  "imports": {
+    "#config/*": "./config/*",
+    "#data/*": "./data/*",
+    "#functions/*": "./src/functions/*"
+  },
   "keywords": [
     "tickettool",
     "ticket",

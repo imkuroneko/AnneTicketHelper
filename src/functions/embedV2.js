@@ -15,7 +15,7 @@
  *
  * Uso:
  *   const { MessageFlags, ButtonBuilder, ButtonStyle } = require('discord.js');
- *   const { buildV2Embed } = require('./discord-embed-v2');
+ *   const { buildV2Embed } = require('#functions/embedV2.js');
  *
  *   const button = new ButtonBuilder()
  *       .setCustomId('mi_boton')

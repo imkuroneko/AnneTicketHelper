@@ -10,7 +10,7 @@ module.exports = {
         // Ficheros a ignorar (para evitar el bot se reinicie cuando estos ficheros sean modificados)
         ignore_watch : [
             './data/embeds.json',
-            './src/config/params.json',
+            './config/params.json',
             './data/db.sqlite',
             './logs/errors.log',
             './logs/out.log'

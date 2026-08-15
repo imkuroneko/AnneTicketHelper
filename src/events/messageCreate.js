@@ -4,7 +4,7 @@ const { Events } = require('discord.js');
 const path = require('path');
 
 // Load configuration files ================================================================================================
-const config = require('../config/params.json');
+const config = require('#config/params.json');
 
 // Module script ===========================================================================================================
 module.exports = {

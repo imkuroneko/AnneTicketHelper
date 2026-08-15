@@ -4,10 +4,10 @@ const { Events } = require('discord.js');
 const path = require('path');
 
 // Load configuration files ================================================================================================
-const { deleteTicketOnLeft } = require('../config/params.json');
+const { deleteTicketOnLeft } = require('#config/params.json');
 
 // Load SQLite Helper ======================================================================================================
-const { getTicketsMemberLeft } = require('../functions/sqlite.js')
+const { getTicketsMemberLeft } = require('#functions/sqlite.js')
 
 // Module script ===========================================================================================================
 module.exports = {

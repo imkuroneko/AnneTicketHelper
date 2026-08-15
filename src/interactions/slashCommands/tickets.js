@@ -5,11 +5,11 @@ const { SlashCommandBuilder, ButtonBuilder, ActionRowBuilder, ButtonStyle } = re
 const wait = require('node:timers/promises').setTimeout;
 
 // Load configuration files ================================================================================================
-const { clientId, staffRole, secDelTicket } = require('../../config/params.json');
-const { template } = require('../../../data/embeds.json');
+const { clientId, staffRole, secDelTicket } = require('#config/params.json');
+const { template } = require('#data/embeds.json');
 
 // Load Functions ==========================================================================================================
-const { isTicket, getDataFromTicket, updateStatus } = require('../../functions/sqlite.js');
+const { isTicket, getDataFromTicket, updateStatus } = require('#functions/sqlite.js');
 
 // Module script ===========================================================================================================
 module.exports = {

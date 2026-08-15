@@ -4,7 +4,7 @@ const { Events } = require('discord.js');
 const path = require('path');
 
 // Load SQLite Helper ======================================================================================================
-const { isTicket, updateStatus } = require('../functions/sqlite.js')
+const { isTicket, updateStatus } = require('#functions/sqlite.js')
 
 // Module script ===========================================================================================================
 module.exports = {

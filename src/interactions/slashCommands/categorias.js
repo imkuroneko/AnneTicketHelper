@@ -4,8 +4,8 @@ const { color } = require('console-log-colors');
 const { SlashCommandBuilder, ChannelType } = require('discord.js');
 
 // Load Functions ==========================================================================================================
-const { hasDiscordEmojis, hasUnicodeEmojis, getFirstDiscordEmoji, getFirstUnicodeEmoji } = require('../../functions/helpers.js');
-const { listCategories, createNewCategory, readCategory, updateCategory, countTicketsOnCategory, deleteCategory } = require('../../functions/sqlite.js');
+const { hasDiscordEmojis, hasUnicodeEmojis, getFirstDiscordEmoji, getFirstUnicodeEmoji } = require('#functions/helpers.js');
+const { listCategories, createNewCategory, readCategory, updateCategory, countTicketsOnCategory, deleteCategory } = require('#functions/sqlite.js');
 
 // Module script ===========================================================================================================
 module.exports = {

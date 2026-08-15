@@ -4,10 +4,10 @@ const { color } = require('console-log-colors');
 const { SlashCommandBuilder, ButtonBuilder, ButtonStyle, MessageFlags } = require('discord.js');
 
 // Load Functions ===========================================================================================================
-const { buildV2Embed } = require('../../functions/embedV2.js');
+const { buildV2Embed } = require('#functions/embedV2.js');
 
 // Load SQLite Helper ======================================================================================================
-const { readCategory } = require('../../functions/sqlite.js');
+const { readCategory } = require('#functions/sqlite.js');
 
 const BUTTON_PREFIX = 'openTicketModal;';
 

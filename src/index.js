@@ -5,7 +5,7 @@ const fs = require('fs');
 const { Client, GatewayIntentBits, Partials, Collection } = require('discord.js');
 
 // Load configuration files ================================================================================================
-const { token } = require('./config/params.json');
+const { token } = require('#config/params.json');
 
 // Define client Intents ===================================================================================================
 const client = new Client({
