@@ -4,7 +4,7 @@ const { SlashCommandBuilder } = require('discord.js');
 const { color } = require('console-log-colors');
 
 // Load Functions ==========================================================================================================
-const {countTotalCategories, countTotalTicketsGlobal, countTotalTicketsOpen, countTotalTicketsClosed, countTotalTicketsDeleted } = require(path.resolve('./functions/sqlite.js'));
+const {countTotalCategories, countTotalTicketsGlobal, countTotalTicketsOpen, countTotalTicketsClosed, countTotalTicketsDeleted } = require('../../functions/sqlite.js');
 
 // Module script ===========================================================================================================
 module.exports = {

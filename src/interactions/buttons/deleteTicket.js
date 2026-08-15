@@ -4,11 +4,11 @@ const path = require('path');
 const wait = require('node:timers/promises').setTimeout;
 
 // Load configuration files ================================================================================================
-const { secDelTicket } = require(path.resolve('./config/params.json'));
-const { template } = require(path.resolve('./data/embeds.json'));
+const { secDelTicket } = require('../../config/params.json');
+const { template } = require('../../../data/embeds.json');
 
 // Load SQLite Helper ======================================================================================================
-const { isTicket, getDataFromTicket, updateStatus } = require(path.resolve('./functions/sqlite.js'));
+const { isTicket, getDataFromTicket, updateStatus } = require('../../functions/sqlite.js');
 
 // Module script ===========================================================================================================
 module.exports = {

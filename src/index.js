@@ -5,7 +5,7 @@ const fs = require('fs');
 const { Client, GatewayIntentBits, Partials, Collection } = require('discord.js');
 
 // Load configuration files ================================================================================================
-const { token } = require(path.resolve('./config/params.json'));
+const { token } = require('./config/params.json');
 
 // Define client Intents ===================================================================================================
 const client = new Client({
@@ -33,7 +33,7 @@ client.startupTime = Date.now();
 
 // [1] Admin Commands (with prefix) ========================================================================================
 try {
-    var pathFiles = './commands';
+    var pathFiles = path.join(__dirname, 'commands');
     client.commandsPrefix = new Collection();
     const prefixCommandFiles = fs.readdirSync(path.resolve(pathFiles)).filter(file => file.endsWith(".js"));
     for(const prefixFile of prefixCommandFiles) {
@@ -46,7 +46,7 @@ try {
 // [2] Interactions :: SlashCommands =======================================================================================
 client.interactionsSlash = new Collection();
 try {
-    var pathFiles = './interactions/slashCommands';
+    var pathFiles = path.join(__dirname, 'interactions/slashCommands');
     client.slashRegister = [];
     const slashCommandFiles = fs.readdirSync(path.resolve(pathFiles)).filter(file => file.endsWith('.js'));
     for(const slashFile of slashCommandFiles) {
@@ -60,7 +60,7 @@ try {
 
 // [3] Interactions :: Buttons =============================================================================================
 try {
-    var pathFiles = './interactions/buttons';
+    var pathFiles = path.join(__dirname, 'interactions/buttons');
     client.interactionsButtons = new Collection();
     const interactionsFiles = fs.readdirSync(path.resolve(pathFiles)).filter(file => file.endsWith('.js'));
     for(const interactionFile of interactionsFiles) {
@@ -73,7 +73,7 @@ try {
 
 // [4] Interactions :: Menus ===============================================================================================
 try {
-    var pathFiles = './interactions/selectMenu';
+    var pathFiles = path.join(__dirname, 'interactions/selectMenu');
     client.interactionsSelectMenu = new Collection();
     const interactionsFiles = fs.readdirSync(path.resolve(pathFiles)).filter(file => file.endsWith('.js'));
     for(const interactionFile of interactionsFiles) {
@@ -85,7 +85,7 @@ try {
 
 // Handle :: Events ========================================================================================================
 try {
-    var pathFiles = './events';
+    var pathFiles = path.join(__dirname, 'events');
     const events = fs.readdirSync(path.resolve(pathFiles)).filter(file => file.endsWith('.js'));
     for(const file of events) {
         const event = require(path.resolve(path.join(pathFiles, file)));

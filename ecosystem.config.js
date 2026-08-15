@@ -2,7 +2,7 @@ module.exports = {
     apps : [{
         name : "AyamiTicketHelper",
         version: "3.0.1",
-        script : "./index.js",
+        script : "./src/index.js",
 
         watch : true,
         max_restarts : 10,
@@ -10,7 +10,7 @@ module.exports = {
         // Ficheros a ignorar (para evitar el bot se reinicie cuando estos ficheros sean modificados)
         ignore_watch : [
             './data/embeds.json',
-            './config/params.json',
+            './src/config/params.json',
             './data/db.sqlite',
             './logs/errors.log',
             './logs/out.log'

@@ -6,13 +6,13 @@ const timezone = require('dayjs/plugin/timezone');
 const { color } = require('console-log-colors');
 
 // Load configuration files ================================================================================================
-const { serverTimezone } = require(path.resolve('./config/params.json'));
+const { serverTimezone } = require('../config/params.json');
 
 // Database ================================================================================================================
-const sql = new SQLite(path.resolve('./data/db.sqlite'));
+const sql = new SQLite(path.join(__dirname, '../../data/db.sqlite'));
 
 // Load custom functions ===================================================================================================
-const { uid } = require(path.resolve('./functions/helpers.js'));
+const { uid } = require('./helpers.js');
 
 // Internal Function =======================================================================================================
 function getCurrentTimestamp() {

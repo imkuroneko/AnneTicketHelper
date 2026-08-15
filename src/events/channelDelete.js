@@ -4,7 +4,7 @@ const { Events } = require('discord.js');
 const path = require('path');
 
 // Load SQLite Helper ======================================================================================================
-const { isTicket } = require(path.resolve('./functions/sqlite.js'))
+const { isTicket, updateStatus } = require('../functions/sqlite.js')
 
 // Module script ===========================================================================================================
 module.exports = {
@@ -17,7 +17,7 @@ module.exports = {
             const validateTicket = await isTicket(guildId, channelId);
             if(!validateTicket) { return; }
 
-            await sqlite.updateStatus(guildId, channelId, 'deleted');
+            await updateStatus(guildId, channelId, 'deleted');
         } catch(error) {
             console.error(color.red('[event:channelDelete]'), error.message);
         }

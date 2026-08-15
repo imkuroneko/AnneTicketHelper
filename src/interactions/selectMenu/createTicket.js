@@ -5,11 +5,11 @@ const path = require('path');
 const wait = require('node:timers/promises').setTimeout;
 
 // Load configuration files ================================================================================================
-const { clientId, staffRole } = require(path.resolve('./config/params.json'));
-const { template, footer } = require(path.resolve('./data/embeds.json'));
+const { clientId, staffRole } = require('../../config/params.json');
+const { template, footer } = require('../../../data/embeds.json');
 
 // Load SQLite Helper ======================================================================================================
-const { readCategory, countOpenTicketsByUser, generateTicketId, createNewTicket } = require(path.resolve('./functions/sqlite.js'));
+const { readCategory, countOpenTicketsByUser, generateTicketId, createNewTicket } = require('../../functions/sqlite.js');
 
 // Module script ===========================================================================================================
 module.exports = {

@@ -5,7 +5,7 @@ const { color } = require('console-log-colors');
 const { SlashCommandBuilder, ActionRowBuilder, StringSelectMenuBuilder } = require('discord.js');
 
 // Load SQLite Helper ======================================================================================================
-const { readCategory } = require(path.resolve('./functions/sqlite.js'));
+const { readCategory } = require('../../functions/sqlite.js');
 
 // Module script ===========================================================================================================
 module.exports = {
