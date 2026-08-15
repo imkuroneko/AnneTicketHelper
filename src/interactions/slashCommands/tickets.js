@@ -2,9 +2,10 @@
 const path = require('path');
 const { color } = require('console-log-colors');
 const { SlashCommandBuilder, ButtonBuilder, ActionRowBuilder, ButtonStyle } = require('discord.js');
+const wait = require('node:timers/promises').setTimeout;
 
 // Load configuration files ================================================================================================
-const { clientId, staffRole } = require('../../config/params.json');
+const { clientId, staffRole, secDelTicket } = require('../../config/params.json');
 const { template } = require('../../../data/embeds.json');
 
 // Load Functions ==========================================================================================================
@@ -71,6 +72,8 @@ module.exports = {
 
                     channelEdit.edit({ permissionOverwrites: channelPermissions });
                 });
+
+                return;
             }
 
             if(cmd == 'cerrar') {
@@ -114,7 +117,9 @@ module.exports = {
                     }
 
                     channelEdit.edit({ permissionOverwrites: channelPermissions });
-                });    
+                });
+
+                return;
             }
 
             if(cmd == 'eliminar') {
@@ -145,6 +150,8 @@ module.exports = {
 
                 const channelDel = await interaction.guild.channels.cache.get(optionId);
                 channelDel.delete();
+
+                return;
             }
 
             return interaction.reply({ content: '🦄 **eep!** opción de acción no válida', ephemeral: true });

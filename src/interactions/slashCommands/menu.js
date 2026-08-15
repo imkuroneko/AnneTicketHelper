@@ -20,33 +20,31 @@ module.exports = {
             const categorias = interaction.options.getString('categorias');
             const catsAsObj = categorias.split(',');
 
-            // validate categories
+            // validate categories (y descarta las que tengan el emoji corrupto)
             var validCats = [];
-            await catsAsObj.forEach(async (cat) => {
-                var catInfo = await readCategory(cat.trim());
-                if(typeof catInfo != 'undefined') { validCats.push(catInfo); }
-            });
+            catsAsObj.forEach((cat) => {
+                var catInfo = readCategory(cat.trim());
+                if(typeof catInfo == 'undefined') { return; }
 
-            // build embed
-            var fieldsContent = [];
-            validCats.forEach(async (cat) => {
-                fieldsContent.push({ name: `**${cat.name}**`, value: cat.description });
-            });
-
-            // build menu
-            var selectOptions = [];
-            validCats.forEach(async (cat) => {
-                let emojiRecovered = JSON.parse(cat.emoji);
-
-                if(emojiRecovered.length == 1) {
-                    emoji = emojiRecovered.name;
-                } else {
-                    emoji = emojiRecovered;
+                try {
+                    catInfo.emoji = JSON.parse(catInfo.emoji);
+                } catch(error) {
+                    console.error(color.red('[interaction:slashcmd:menu]'), `Emoji inválido en categoría ${catInfo.uid} (${catInfo.name}), se omite del menú: ${error.message}`);
+                    return;
                 }
 
-                var optionAdd = { label: cat.name, value: 'createTicket;'+cat.uid, emoji: emoji };
-                selectOptions.push(optionAdd);
+                validCats.push(catInfo);
             });
+
+            if(validCats.length === 0) {
+                return interaction.reply({ content: 'Ninguna de las categorías indicadas es válida.', ephemeral: true });
+            }
+
+            // build embed
+            var fieldsContent = validCats.map((cat) => ({ name: `**${cat.name}**`, value: cat.description }));
+
+            // build menu
+            var selectOptions = validCats.map((cat) => ({ label: cat.name, value: 'createTicket;'+cat.uid, emoji: cat.emoji }));
 
             const menu = new ActionRowBuilder().addComponents(
                 new StringSelectMenuBuilder()

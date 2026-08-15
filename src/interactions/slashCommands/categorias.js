@@ -150,7 +150,7 @@ module.exports = {
                     return interaction.reply({ content: 'No se ha encontrado una categoría con el UID indicado', ephemeral: true });
                 }
 
-                var ticketsOnCat = await countTicketsOnCategory(uid);
+                var ticketsOnCat = await countTicketsOnCategory(getCategory.category);
                 if(ticketsOnCat > 0) {
                     return interaction.reply({ content: 'No se puede eliminar esta categoría porque aún hay tickets (nuevos/abiertos/cerrados)', ephemeral: true });
                 }
