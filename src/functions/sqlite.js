@@ -21,6 +21,7 @@ sql.pragma('foreign_keys = ON');
 sql.exec(`
     CREATE TABLE IF NOT EXISTS tickets_categories (
         "uid"           TEXT NOT NULL,
+        "guild"         TEXT NOT NULL,
         "name"          TEXT NOT NULL,
         "category"      TEXT NOT NULL,
         "emoji"         TEXT NOT NULL,
@@ -60,6 +61,16 @@ const ticketsDetailsColumns = sql.prepare('PRAGMA table_info(tickets_details)').
 if(!ticketsDetailsColumns.includes('subject'))     { sql.exec('ALTER TABLE tickets_details ADD COLUMN "subject" TEXT'); }
 if(!ticketsDetailsColumns.includes('description')) { sql.exec('ALTER TABLE tickets_details ADD COLUMN "description" TEXT'); }
 
+// "guild" nullable acá porque SQLite no permite agregar una columna NOT NULL sin default; en tablas ya existentes las
+// categorías viejas (creadas antes de esta migración) van a quedar con guild NULL y no aparecerán en /menu ni /categorias
+// hasta recrearlas — no hay forma de inferir a qué guild pertenecían.
+const ticketsCategoriesColumns = sql.prepare('PRAGMA table_info(tickets_categories)').all().map((c) => c.name);
+if(!ticketsCategoriesColumns.includes('guild')) { sql.exec('ALTER TABLE tickets_categories ADD COLUMN "guild" TEXT'); }
+
+// El índice de "guild" en tickets_categories se crea recién acá (no en el bootstrap de arriba) porque en una base ya
+// existente la columna no existe todavía en ese punto — se agrega justo antes, en la línea de ALTER TABLE de arriba.
+sql.exec('CREATE INDEX IF NOT EXISTS idx_tickets_categories_guild ON tickets_categories("guild")');
+
 // Prepared statements (prepared once at module load, reused on every call) ================================================
 const stmt = {
     isTicket: sql.prepare(" SELECT count(*) as count FROM tickets_details WHERE guild = ? AND channel = ? "),
@@ -80,9 +91,9 @@ const stmt = {
     updateStatus: sql.prepare(" UPDATE tickets_details SET status = @sts, timestamp_deletion = @tms WHERE guild = @gld AND channel = @chn; "),
     getTicketsMemberLeft: sql.prepare(" SELECT category, channel FROM tickets_details WHERE guild = @gld AND user = @usr AND status != 'D'; "),
 
-    listCategories: sql.prepare(" SELECT * FROM tickets_categories "),
+    listCategoriesByGuild: sql.prepare(" SELECT * FROM tickets_categories WHERE guild = ? "),
     categoryUidExists: sql.prepare(" SELECT count(*) as count FROM tickets_categories WHERE uid = ? "),
-    createNewCategory: sql.prepare(" INSERT INTO tickets_categories (uid, name, category, emoji, description, limit_tickets) VALUES (@u, @n, @c, @e, @d, @l); "),
+    createNewCategory: sql.prepare(" INSERT INTO tickets_categories (uid, guild, name, category, emoji, description, limit_tickets) VALUES (@u, @g, @n, @c, @e, @d, @l); "),
     readCategory: sql.prepare(" SELECT * FROM tickets_categories WHERE uid = ? "),
     updateCategory: sql.prepare(" UPDATE tickets_categories SET name = @n, description = @d, limit_tickets = @l WHERE uid = @u; "),
     deleteCategory: sql.prepare(" DELETE FROM tickets_categories WHERE uid = @uid; "),
@@ -189,17 +200,17 @@ module.exports = {
         }
     },
 
-    listCategories: () => {
+    listCategoriesByGuild: (guildId) => {
         try {
-            return stmt.listCategories.all();
+            return stmt.listCategoriesByGuild.all(guildId);
         } catch(error) {
-            console.error(color.red('[sqlite:listCategories]'), error.message);
+            console.error(color.red('[sqlite:listCategoriesByGuild]'), error.message);
         }
     },
 
-    createNewCategory: (name, category, emoji, description, limit) => {
+    createNewCategory: (guildId, name, category, emoji, description, limit) => {
         try {
-            stmt.createNewCategory.run({ u: genCatUID(), n: name, c: category, e: emoji, d: description, l: limit });
+            stmt.createNewCategory.run({ u: genCatUID(), g: guildId, n: name, c: category, e: emoji, d: description, l: limit });
         } catch(error) {
             console.error(color.red('[sqlite:createNewCategory]'), error.message);
         }
