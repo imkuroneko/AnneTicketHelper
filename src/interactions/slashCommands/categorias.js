@@ -82,6 +82,7 @@ module.exports = {
                         .setTextInputComponent(input => input
                             .setCustomId('emoji')
                             .setStyle(TextInputStyle.Short)
+                            .setMinLength(1)
                             .setMaxLength(35)
                             .setRequired(true)
                         ),
@@ -90,6 +91,7 @@ module.exports = {
                         .setTextInputComponent(input => input
                             .setCustomId('limite')
                             .setStyle(TextInputStyle.Short)
+                            .setMinLength(1)
                             .setMaxLength(3)
                             .setRequired(true)
                         ),
