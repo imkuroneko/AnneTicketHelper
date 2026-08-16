@@ -1,29 +1,34 @@
 // Load required resources =================================================================================================
 const { color } = require('console-log-colors');
-const path = require('path');
 const { Routes } = require('discord.js');
-const { REST } = require('@discordjs/rest');
 
 // Load configuration files ================================================================================================
-const { clientId, ownerId, token } = require('#config/params.json')
+const { clientId, ownerId } = require('#config/params.json')
 
 // Module script ===========================================================================================================
 exports.run = (client, message, args) => {
     try {
         if(message.author.id != ownerId) { return; }
 
-        const rest = new REST({ version: '10' }).setToken(token);
+        if(!message.guild) {
+            return message.reply('🦄 Este comando debe usarse dentro de un servidor.');
+        }
 
-        rest.get(Routes.applicationCommands(clientId)).then((data) => {
-            const promises = [];
-            for(const command of data) {
-                const deleteUrl = `${Routes.applicationCommands(clientId)}/${command.id}`;
-                promises.push(rest.delete(deleteUrl));
-            }
-            Promise.all(promises);
+        const route = Routes.applicationGuildCommands(clientId, message.guild.id);
+
+        client.rest.get(route).then((commands) => {
+            const deletions = commands.map((command) => client.rest.delete(`${route}/${command.id}`));
+
+            Promise.all(deletions).then(() => {
+                message.reply('🦄 Todos los comandos slash de este servidor fueron eliminados');
+            }).catch((error) => {
+                message.reply(`\`[🦄 cmdPrefix:slashdeleter]\` ${error.message}`);
+                console.error(color.red('[cmdPrefix:slashdeleter]'), error.message);
+            });
+        }).catch((error) => {
+            message.reply(`\`[🦄 cmdPrefix:slashdeleter]\` ${error.message}`);
+            console.error(color.red('[cmdPrefix:slashdeleter]'), error.message);
         });
-
-        return message.reply('🦄 Todos los comandos slash fueron eliminados');
     } catch(error) {
         console.error(color.red('[cmdPrefix:slashdeleter]'), error.message);
     }
