@@ -1,5 +1,6 @@
 // Load required resources =================================================================================================
 const { color } = require('console-log-colors');
+const { MessageFlags } = require('discord.js');
 const path = require('path');
 const wait = require('node:timers/promises').setTimeout;
 
@@ -20,14 +21,14 @@ module.exports = {
 
             const validateTicket = await isTicket(guildId, optionId);
             if(!validateTicket) {
-                return interaction.reply({ content: 'Este canal no es un ticket', ephemeral: true });
+                return interaction.reply({ content: 'Este canal no es un ticket', flags: MessageFlags.Ephemeral });
             }
 
             const ticketInfo = await getDataFromTicket(guildId, optionId);
             if(typeof ticketInfo == 'undefined') {
                 return interaction.reply({
                     content: 'No se pudo obtener detalles del ticket porque no se encuentra registrado',
-                    ephemeral: true
+                    flags: MessageFlags.Ephemeral
                 });
             }
 

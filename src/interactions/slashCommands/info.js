@@ -1,6 +1,6 @@
 // Load required resources =================================================================================================
 const path = require('path');
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, MessageFlags } = require('discord.js');
 const { color } = require('console-log-colors');
 
 // Load Functions ==========================================================================================================
@@ -33,10 +33,10 @@ module.exports = {
                         "```",
                     footer: { text: 'Developed by @imkuroneko' }
                 }],
-                ephemeral: true
+                flags: MessageFlags.Ephemeral
             });
 
-            return interaction.reply({ content: '🦄 **eep!** opción de acción no válida', ephemeral: true });
+            return interaction.reply({ content: '🦄 **eep!** opción de acción no válida', flags: MessageFlags.Ephemeral });
         } catch(error) {
             console.error(color.red('[interaction:slashcmd:info]'), error.message);
         }

@@ -1,6 +1,6 @@
 // Load required resources =================================================================================================
 const { color } = require('console-log-colors');
-const { Events } = require('discord.js');
+const { Events, MessageFlags } = require('discord.js');
 
 // Module script ===========================================================================================================
 module.exports = {
@@ -15,7 +15,7 @@ module.exports = {
                     await command.execute(interaction);
                 } catch(error) {
                     console.error(color.red('event:interactionCreate:command'), error.message);
-                    return interaction.reply({ content: 'oops! hubo un error al ejecutar el evento slash 😣', ephemeral: true });
+                    return interaction.reply({ content: 'oops! hubo un error al ejecutar el evento slash 😣', flags: MessageFlags.Ephemeral });
                 }
             }
 
@@ -29,7 +29,7 @@ module.exports = {
                     await action.execute(interaction);
                 } catch(error) {
                     console.error(color.red('event:interactionCreate:modal'), error.message);
-                    return interaction.reply({ content: 'oops! hubo un error al ejecutar el modal 😣', ephemeral: true });
+                    return interaction.reply({ content: 'oops! hubo un error al ejecutar el modal 😣', flags: MessageFlags.Ephemeral });
                 }
             }
 
@@ -44,7 +44,7 @@ module.exports = {
                     await btnAction.execute(interaction);
                 } catch(error) {
                     console.error(color.red('event:interactionCreate:button'), error.message);
-                    return interaction.reply({ content: 'oops! hubo un error al ejecutar el evento button 😣', ephemeral: true });
+                    return interaction.reply({ content: 'oops! hubo un error al ejecutar el evento button 😣', flags: MessageFlags.Ephemeral });
                 }
             }
         } catch(error) {

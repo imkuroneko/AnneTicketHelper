@@ -1,6 +1,6 @@
 // Load required resources =================================================================================================
 const { color } = require('console-log-colors');
-const { ModalBuilder, TextInputStyle, StringSelectMenuOptionBuilder } = require('discord.js');
+const { ModalBuilder, TextInputStyle, StringSelectMenuOptionBuilder, MessageFlags } = require('discord.js');
 
 // Load SQLite Helper ======================================================================================================
 const { readCategory, getMenuCategories } = require('#functions/sqlite.js');
@@ -14,7 +14,7 @@ module.exports = {
             const uids = getMenuCategories(menuUid);
 
             if(typeof uids == 'undefined') {
-                return interaction.reply({ content: 'Este menú ya no está disponible.', ephemeral: true });
+                return interaction.reply({ content: 'Este menú ya no está disponible.', flags: MessageFlags.Ephemeral });
             }
 
             var categoryOptions = [];
@@ -36,7 +36,7 @@ module.exports = {
             });
 
             if(categoryOptions.length === 0) {
-                return interaction.reply({ content: 'Ninguna de las categorías de este menú está disponible actualmente.', ephemeral: true });
+                return interaction.reply({ content: 'Ninguna de las categorías de este menú está disponible actualmente.', flags: MessageFlags.Ephemeral });
             }
 
             const modal = new ModalBuilder()

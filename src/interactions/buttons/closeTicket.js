@@ -1,6 +1,6 @@
 // Load required resources =================================================================================================
 const { color } = require('console-log-colors');
-const { ButtonBuilder, ActionRowBuilder, ButtonStyle } = require('discord.js');
+const { ButtonBuilder, ActionRowBuilder, ButtonStyle, MessageFlags, OverwriteType } = require('discord.js');
 const path = require('path');
 
 // Load configuration files ================================================================================================
@@ -20,14 +20,14 @@ module.exports = {
 
             const validateTicket = await isTicket(guildId, optionId);
             if(!validateTicket) {
-                return interaction.reply({ content: 'Este canal no es un ticket', ephemeral: true });
+                return interaction.reply({ content: 'Este canal no es un ticket', flags: MessageFlags.Ephemeral });
             }
 
             const ticketInfo = await getDataFromTicket(guildId, optionId);
             if(typeof ticketInfo == 'undefined') {
                 return interaction.reply({
                     content: 'No se pudo obtener detalles del ticket porque no se encuentra registrado',
-                    ephemeral: true
+                    flags: MessageFlags.Ephemeral
                 });
             }
 
@@ -48,13 +48,13 @@ module.exports = {
 
             interaction.guild.channels.fetch(optionId).then( (channelEdit) => {
                 var channelPermissions = [
-                    { id: interaction.member.guild.roles.everyone.id, deny: [ 'ViewChannel', 'ReadMessageHistory' ] },
-                    { id: clientId, allow: [ 'ViewChannel', 'ReadMessageHistory', 'SendMessages', 'ManageChannels', 'ManageMessages', 'ManageRoles' ] },
-                    { id: ticketInfo.user, deny: [ 'ViewChannel', 'ReadMessageHistory', 'SendMessages' ] },
+                    { id: interaction.member.guild.roles.everyone.id, type: OverwriteType.Role, deny: [ 'ViewChannel', 'ReadMessageHistory' ] },
+                    { id: clientId, type: OverwriteType.Member, allow: [ 'ViewChannel', 'ReadMessageHistory', 'SendMessages', 'ManageChannels', 'ManageMessages', 'ManageRoles' ] },
+                    { id: ticketInfo.user, type: OverwriteType.Member, deny: [ 'ViewChannel', 'ReadMessageHistory', 'SendMessages' ] },
                 ];
 
                 if(typeof staffRole != 'undefined' && staffRole.length > 0 ) {
-                    channelPermissions.push({ id: staffRole, allow: [ 'ViewChannel', 'ReadMessageHistory', 'SendMessages' ] });
+                    channelPermissions.push({ id: staffRole, type: OverwriteType.Role, allow: [ 'ViewChannel', 'ReadMessageHistory', 'SendMessages' ] });
                 }
 
                 channelEdit.edit({ permissionOverwrites: channelPermissions });

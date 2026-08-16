@@ -1,6 +1,6 @@
 // Load required resources =================================================================================================
 const { color } = require('console-log-colors');
-const { SlashCommandBuilder, ModalBuilder, StringSelectMenuOptionBuilder } = require('discord.js');
+const { SlashCommandBuilder, ModalBuilder, StringSelectMenuOptionBuilder, MessageFlags } = require('discord.js');
 
 // Load SQLite Helper ======================================================================================================
 const { listCategoriesByGuild } = require('#functions/sqlite.js');
@@ -29,7 +29,7 @@ module.exports = {
             });
 
             if(options.length === 0) {
-                return interaction.reply({ content: 'No hay categorías válidas registradas en este servidor. Creá una con `/categorias crear`.', ephemeral: true });
+                return interaction.reply({ content: 'No hay categorías válidas registradas en este servidor. Creá una con `/categorias crear`.', flags: MessageFlags.Ephemeral });
             }
 
             // Los select menu de Discord admiten un máximo de 25 opciones

@@ -23,7 +23,7 @@ module.exports = {
             });
 
             if(validCats.length === 0) {
-                return interaction.reply({ content: 'Ninguna de las categorías seleccionadas es válida.', ephemeral: true });
+                return interaction.reply({ content: 'Ninguna de las categorías seleccionadas es válida.', flags: MessageFlags.Ephemeral });
             }
 
             // El botón lleva un UID corto que apunta al registro con la lista real de categorías; así el customId
@@ -47,7 +47,7 @@ module.exports = {
             const sender = interaction.guild.channels.cache.get(interaction.channelId);
             await sender.send({ flags: MessageFlags.IsComponentsV2, components: [ container ] });
 
-            interaction.reply({ content: 'Menú creado exitosamente!', ephemeral: true });
+            interaction.reply({ content: 'Menú creado exitosamente!', flags: MessageFlags.Ephemeral });
         } catch(error) {
             console.error(color.red('[interaction:modals:menucategories]'), error.message);
         }

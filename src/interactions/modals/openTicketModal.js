@@ -1,6 +1,6 @@
 // Load required resources =================================================================================================
 const { color } = require('console-log-colors');
-const { ChannelType, ButtonBuilder, ActionRowBuilder, ButtonStyle } = require('discord.js');
+const { ChannelType, ButtonBuilder, ActionRowBuilder, ButtonStyle, MessageFlags, OverwriteType } = require('discord.js');
 
 // Load configuration files ================================================================================================
 const { clientId, staffRole } = require('#config/params.json');
@@ -22,7 +22,7 @@ module.exports = {
             const subject = interaction.fields.getTextInputValue('asunto');
             const description = interaction.fields.getTextInputValue('descripcion');
 
-            await interaction.deferReply({ ephemeral: true });
+            await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
             const catInfo = readCategory(categoryUid);
             if(typeof catInfo == 'undefined') {
@@ -35,13 +35,13 @@ module.exports = {
             }
 
             var channelPermissions = [
-                { id: interaction.member.guild.roles.everyone.id, deny: [ 'ViewChannel', 'ReadMessageHistory' ] },
-                { id: clientId, allow: [ 'ViewChannel', 'ReadMessageHistory', 'SendMessages', 'ManageChannels', 'ManageMessages', 'ManageRoles' ] },
-                { id: userId, allow: [ 'ViewChannel', 'ReadMessageHistory', 'SendMessages' ] },
+                { id: interaction.member.guild.roles.everyone.id, type: OverwriteType.Role, deny: [ 'ViewChannel', 'ReadMessageHistory' ] },
+                { id: clientId, type: OverwriteType.Member, allow: [ 'ViewChannel', 'ReadMessageHistory', 'SendMessages', 'ManageChannels', 'ManageMessages', 'ManageRoles' ] },
+                { id: userId, type: OverwriteType.Member, allow: [ 'ViewChannel', 'ReadMessageHistory', 'SendMessages' ] },
             ];
 
             if(typeof staffRole != 'undefined' && staffRole.length > 0 ) {
-                channelPermissions.push({ id: staffRole, allow: [ 'ViewChannel', 'ReadMessageHistory', 'SendMessages' ] });
+                channelPermissions.push({ id: staffRole, type: OverwriteType.Role, allow: [ 'ViewChannel', 'ReadMessageHistory', 'SendMessages' ] });
             }
 
             const newTicketId = generateTicketId(guildId, catInfo.category);

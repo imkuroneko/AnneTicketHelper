@@ -1,7 +1,7 @@
 // Load required resources =================================================================================================
 const path = require('path');
 const { color } = require('console-log-colors');
-const { SlashCommandBuilder, ChannelType } = require('discord.js');
+const { SlashCommandBuilder, ChannelType, MessageFlags } = require('discord.js');
 
 // Load Functions ==========================================================================================================
 const { hasDiscordEmojis, hasUnicodeEmojis, getFirstDiscordEmoji, getFirstUnicodeEmoji } = require('#functions/helpers.js');
@@ -78,15 +78,15 @@ module.exports = {
                 const categoria = interaction.options.getChannel('categoria');
                 const limite = interaction.options.getInteger('limite');
 
-                if(isNaN(limite)) { return interaction.reply({ content: 'El límite debe ser numérico', ephemeral: true }); }
-                if(limite == 0)   { return interaction.reply({ content: 'El límite debe ser mayor a cero.', ephemeral: true }); }
+                if(isNaN(limite)) { return interaction.reply({ content: 'El límite debe ser numérico', flags: MessageFlags.Ephemeral }); }
+                if(limite == 0)   { return interaction.reply({ content: 'El límite debe ser mayor a cero.', flags: MessageFlags.Ephemeral }); }
 
-                if(hasDiscordEmojis(descripcion) || hasUnicodeEmojis(descripcion)) { return interaction.reply({ content: 'La descripción no puede contener emojis', ephemeral: true }); }
+                if(hasDiscordEmojis(descripcion) || hasUnicodeEmojis(descripcion)) { return interaction.reply({ content: 'La descripción no puede contener emojis', flags: MessageFlags.Ephemeral }); }
 
-                if(!hasUnicodeEmojis(emoji) && !hasDiscordEmojis(emoji)) { return interaction.reply({ content: 'Por favor escriba un emoji en el campo **emoji**', ephemeral: true }); }
+                if(!hasUnicodeEmojis(emoji) && !hasDiscordEmojis(emoji)) { return interaction.reply({ content: 'Por favor escriba un emoji en el campo **emoji**', flags: MessageFlags.Ephemeral }); }
 
                 if(hasDiscordEmojis(emoji)) {
-                    if(emoji.startsWith('<a:')) { return interaction.reply({ content: 'No se permiten emojis animados', ephemeral: true }); }
+                    if(emoji.startsWith('<a:')) { return interaction.reply({ content: 'No se permiten emojis animados', flags: MessageFlags.Ephemeral }); }
 
                     emote = getFirstDiscordEmoji(emoji);
                     emojiContent = emoji.replace('<:', '');
@@ -114,7 +114,7 @@ module.exports = {
                                 { name: 'Categoria', value: categoria.name+' ('+categoria.id+')', inline: false },
                             ]
                     }],
-                    ephemeral: true
+                    flags: MessageFlags.Ephemeral
                 });
             }
 
@@ -128,16 +128,16 @@ module.exports = {
                 var getCategory = await readCategory(uid);
 
                 if(typeof getCategory == 'undefined' || getCategory.guild !== interaction.guildId) {
-                    return interaction.reply({ content: 'No se ha encontrado una categoría con el UID indicado', ephemeral: true });
+                    return interaction.reply({ content: 'No se ha encontrado una categoría con el UID indicado', flags: MessageFlags.Ephemeral });
                 }
 
-                if(isNaN(limite)) { return interaction.reply({ content: 'El límite debe ser numérico', ephemeral: true }); }
-                if(limite == 0)   { return interaction.reply({ content: 'El límite debe ser mayor a cero.', ephemeral: true }); }
-                if(hasDiscordEmojis(descripcion) || hasUnicodeEmojis(descripcion)) { return interaction.reply({ content: 'La descripción no puede contener emojis', ephemeral: true }); }
+                if(isNaN(limite)) { return interaction.reply({ content: 'El límite debe ser numérico', flags: MessageFlags.Ephemeral }); }
+                if(limite == 0)   { return interaction.reply({ content: 'El límite debe ser mayor a cero.', flags: MessageFlags.Ephemeral }); }
+                if(hasDiscordEmojis(descripcion) || hasUnicodeEmojis(descripcion)) { return interaction.reply({ content: 'La descripción no puede contener emojis', flags: MessageFlags.Ephemeral }); }
 
                 await updateCategory(uid, nombre, descripcion, limite);
 
-                return interaction.reply({ content: 'Se ha modificado la categoría! Recuerda deberás modificar manualmente en los selectores donde lo necesites', ephemeral: true });
+                return interaction.reply({ content: 'Se ha modificado la categoría! Recuerda deberás modificar manualmente en los selectores donde lo necesites', flags: MessageFlags.Ephemeral });
             }
 
             // eliminar categoria
@@ -147,19 +147,19 @@ module.exports = {
                 var getCategory = await readCategory(uid);
 
                 if(typeof getCategory == 'undefined' || getCategory.guild !== interaction.guildId) {
-                    return interaction.reply({ content: 'No se ha encontrado una categoría con el UID indicado', ephemeral: true });
+                    return interaction.reply({ content: 'No se ha encontrado una categoría con el UID indicado', flags: MessageFlags.Ephemeral });
                 }
 
                 var ticketsOnCat = await countTicketsOnCategory(getCategory.category);
                 if(ticketsOnCat > 0) {
-                    return interaction.reply({ content: 'No se puede eliminar esta categoría porque aún hay tickets (nuevos/abiertos/cerrados)', ephemeral: true });
+                    return interaction.reply({ content: 'No se puede eliminar esta categoría porque aún hay tickets (nuevos/abiertos/cerrados)', flags: MessageFlags.Ephemeral });
                 }
 
                 await deleteCategory(uid);
-                return interaction.reply({ content: 'Se ha eliminado la categoría! Recuerda deberás modificar manualmente en los selectores donde lo necesites', ephemeral: true });
+                return interaction.reply({ content: 'Se ha eliminado la categoría! Recuerda deberás modificar manualmente en los selectores donde lo necesites', flags: MessageFlags.Ephemeral });
             }
 
-            return interaction.reply({ content: '🦄 **eep!** opción de acción no válida', ephemeral: true });
+            return interaction.reply({ content: '🦄 **eep!** opción de acción no válida', flags: MessageFlags.Ephemeral });
         } catch(error) {
             console.error(color.red('[interaction:slashcmd:categorias]'), error.message);
         }
