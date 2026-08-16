@@ -1,7 +1,9 @@
+const package = require('./package.json');
+
 module.exports = {
     apps : [{
-        name : "AyamiTicketHelper",
-        version: "3.0.1",
+        name : package.name,
+        version: package.version,
         script : "./src/index.js",
 
         watch : true,
