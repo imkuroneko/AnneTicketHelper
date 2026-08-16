@@ -5,7 +5,7 @@ const { SlashCommandBuilder, ChannelType } = require('discord.js');
 
 // Load Functions ==========================================================================================================
 const { hasDiscordEmojis, hasUnicodeEmojis, getFirstDiscordEmoji, getFirstUnicodeEmoji } = require('#functions/helpers.js');
-const { listCategories, createNewCategory, readCategory, updateCategory, countTicketsOnCategory, deleteCategory } = require('#functions/sqlite.js');
+const { listCategoriesByGuild, createNewCategory, readCategory, updateCategory, countTicketsOnCategory, deleteCategory } = require('#functions/sqlite.js');
 
 // Module script ===========================================================================================================
 module.exports = {
@@ -57,7 +57,7 @@ module.exports = {
 
             // listar categorias
             if(cmd == 'listar') {
-                const categorias = await listCategories();
+                const categorias = listCategoriesByGuild(interaction.guildId);
 
                 var fields = [];
                 categorias.forEach((cat) => {
@@ -100,7 +100,7 @@ module.exports = {
                     catEmoji = JSON.stringify({ name: '🎫' });
                 }
 
-                await createNewCategory(nombre, categoria.id, catEmoji, descripcion, limite);
+                createNewCategory(interaction.guildId, nombre, categoria.id, catEmoji, descripcion, limite);
 
                 return interaction.reply({
                     embeds: [{
@@ -127,7 +127,7 @@ module.exports = {
 
                 var getCategory = await readCategory(uid);
 
-                if(typeof getCategory == 'undefined') {
+                if(typeof getCategory == 'undefined' || getCategory.guild !== interaction.guildId) {
                     return interaction.reply({ content: 'No se ha encontrado una categoría con el UID indicado', ephemeral: true });
                 }
 
@@ -146,7 +146,7 @@ module.exports = {
 
                 var getCategory = await readCategory(uid);
 
-                if(typeof getCategory == 'undefined') {
+                if(typeof getCategory == 'undefined' || getCategory.guild !== interaction.guildId) {
                     return interaction.reply({ content: 'No se ha encontrado una categoría con el UID indicado', ephemeral: true });
                 }
 
