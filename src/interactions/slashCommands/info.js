@@ -1,7 +1,6 @@
 // Load required resources =================================================================================================
 const path = require('path');
 const { SlashCommandBuilder, MessageFlags } = require('discord.js');
-const { color } = require('console-log-colors');
 
 // Load Functions ==========================================================================================================
 const {countTotalCategories, countTotalTicketsGlobal, countTotalTicketsOpen, countTotalTicketsClosed, countTotalTicketsDeleted } = require('#functions/sqlite.js');
@@ -38,7 +37,7 @@ module.exports = {
 
             return interaction.reply({ content: '🦄 **eep!** opción de acción no válida', flags: MessageFlags.Ephemeral });
         } catch(error) {
-            console.error(color.red('[interaction:slashcmd:info]'), error.message);
+            console.error('[interaction:slashcmd:info]', error.message);
         }
     }
 };

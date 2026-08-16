@@ -1,5 +1,4 @@
 // Load required resources =================================================================================================
-const { color } = require('console-log-colors');
 const { Routes } = require('discord.js');
 
 // Load configuration files ================================================================================================
@@ -18,9 +17,9 @@ exports.run = (client, message, args) => {
             message.reply('🦄 Todos los comandos fueron registrados/actualizados en este servidor!');
         }).catch((error) => {
             message.reply(`\`[🦄 cmdPrefix:slashregister]\` ${error.message}`);
-            console.error(color.red('[cmdPrefix:slashregister]'), error.message);
+            console.error('[cmdPrefix:slashregister]', error.message);
         });
     } catch(error) {
-        console.error(color.red('[cmdPrefix:slashregister]'), error.message);
+        console.error('[cmdPrefix:slashregister]', error.message);
     }
 }

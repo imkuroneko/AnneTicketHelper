@@ -1,5 +1,4 @@
 // Load required resources =================================================================================================
-const { color } = require('console-log-colors');
 const { Events } = require('discord.js');
 const path = require('path');
 
@@ -30,7 +29,7 @@ module.exports = {
 
             cmd.run(message.client, message, args);
         } catch(error) {
-            console.error(color.red('[event:messageCreate]'), error.message);
+            console.error('[event:messageCreate]', error.message);
         }
     }
 }

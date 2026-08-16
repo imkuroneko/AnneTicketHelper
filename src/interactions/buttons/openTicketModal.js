@@ -1,9 +1,8 @@
 // Load required resources =================================================================================================
-const { color } = require('console-log-colors');
 const { ModalBuilder, TextInputStyle, StringSelectMenuOptionBuilder, MessageFlags } = require('discord.js');
 
 // Load Functions ===========================================================================================================
-const { truncate } = require('#functions/helpers.js');
+const { uid } = require('#functions/helpers.js');
 
 // Load SQLite Helper ======================================================================================================
 const { readCategory, getMenuCategories } = require('#functions/sqlite.js');
@@ -29,12 +28,14 @@ module.exports = {
                 try {
                     emoji = JSON.parse(catInfo.emoji);
                 } catch(error) {
-                    console.error(color.red('[interaction:buttons:openticketmodal]'), `Emoji inválido en categoría ${catInfo.uid} (${catInfo.name}), se omite: ${error.message}`);
+                    console.error('[interaction:buttons:openticketmodal]', `Emoji inválido en categoría ${catInfo.uid} (${catInfo.name}), se omite: ${error.message}`);
                     return;
                 }
 
+                // Nota: Discord no muestra la description de las opciones cuando el select vive dentro de un
+                // modal (a diferencia de un select en un mensaje normal), así que no la seteamos acá.
                 categoryOptions.push(
-                    new StringSelectMenuOptionBuilder().setLabel(catInfo.name).setValue(catInfo.uid).setEmoji(emoji).setDescription(truncate(catInfo.description, 100))
+                    new StringSelectMenuOptionBuilder().setLabel(catInfo.name).setValue(catInfo.uid).setEmoji(emoji)
                 );
             });
 
@@ -42,8 +43,10 @@ module.exports = {
                 return interaction.reply({ content: 'Ninguna de las categorías de este menú está disponible actualmente.', flags: MessageFlags.Ephemeral });
             }
 
+            // El sufijo random evita que Discord precargue en el modal lo que el usuario haya tipeado la vez
+            // anterior (el cliente cachea el contenido de un modal por customId).
             const modal = new ModalBuilder()
-                .setCustomId('openTicketModal')
+                .setCustomId(`openTicketModal;${uid(8)}`)
                 .setTitle('Abrir Ticket');
 
             modal.addLabelComponents(
@@ -73,7 +76,7 @@ module.exports = {
 
             await interaction.showModal(modal);
         } catch(error) {
-            console.error(color.red('[interaction:buttons:openticketmodal]'), error);
+            console.error('[interaction:buttons:openticketmodal]', error);
         }
     }
 };

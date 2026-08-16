@@ -1,5 +1,4 @@
 // Load required resources =================================================================================================
-const { color } = require('console-log-colors');
 const { MessageFlags } = require('discord.js');
 const path = require('path');
 const wait = require('node:timers/promises').setTimeout;
@@ -47,7 +46,7 @@ module.exports = {
             const channelDel = await interaction.guild.channels.cache.get(optionId);
             channelDel.delete();
         } catch(error) {
-            console.error(color.red('[interaction:buttons:deleteticket]'), error);
+            console.error('[interaction:buttons:deleteticket]', error);
         }
     }
 };

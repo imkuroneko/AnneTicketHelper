@@ -1,5 +1,4 @@
 // Load required resources =================================================================================================
-const { color } = require('console-log-colors');
 const { ChannelType, MessageFlags } = require('discord.js');
 
 // Load Functions ==========================================================================================================
@@ -54,7 +53,7 @@ module.exports = {
                 flags: MessageFlags.Ephemeral
             });
         } catch(error) {
-            console.error(color.red('[interaction:modals:categoriacrear]'), error.message);
+            console.error('[interaction:modals:categoriacrear]', error.message);
         }
     }
 };

@@ -1,5 +1,4 @@
 // Load required resources =================================================================================================
-const { color } = require('console-log-colors');
 const { ChannelType, ButtonBuilder, ActionRowBuilder, ButtonStyle, MessageFlags, OverwriteType } = require('discord.js');
 
 // Load configuration files ================================================================================================
@@ -75,11 +74,11 @@ module.exports = {
 
                 newChannel.send({ content: template.new.message.replaceAll('{user}', `<@${userId}>`), embeds: [ embed_welcome ], components: [ btns_ticket ] });
             }).catch((error) => {
-                console.error(color.red('[interaction:modals:openticketmodal:createchannel]'), error.message);
+                console.error('[interaction:modals:openticketmodal:createchannel]', error.message);
                 interaction.editReply({ content: 'Ocurrió un error al crear el canal del ticket.' });
             });
         } catch(error) {
-            console.error(color.red('[interaction:modals:openticketmodal]'), error);
+            console.error('[interaction:modals:openticketmodal]', error);
         }
     }
 };

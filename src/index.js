@@ -1,5 +1,4 @@
 // Load required resources =================================================================================================
-const { color } = require('console-log-colors');
 const path = require('path');
 const fs = require('fs');
 const { Client, GatewayIntentBits, Partials, Collection } = require('discord.js');
@@ -40,7 +39,7 @@ try {
         client.commandsPrefix.set(prefixFile.split(".")[0], require(path.resolve(path.join(pathFiles, prefixFile))));
     }
 } catch(error) {
-    console.error(color.red('[load:cmds]'), error.message);
+    console.error('[load:cmds]', error.message);
 }
 
 // [2] Interactions :: SlashCommands =======================================================================================
@@ -55,7 +54,7 @@ try {
         client.interactionsSlash.set(command.data.name, command);
     }
 } catch(error) {
-    console.error(color.red('[load:cmds:slash]'), error.message);
+    console.error('[load:cmds:slash]', error.message);
 }
 
 // [3] Interactions :: Buttons =============================================================================================
@@ -67,7 +66,7 @@ try {
         client.interactionsButtons.set(interactionFile.split(".")[0], require(path.resolve(path.join(pathFiles, interactionFile))));
     }
 } catch(error) {
-    console.error(color.red('[load:interactions]'), error.message);
+    console.error('[load:interactions]', error.message);
 }
 
 
@@ -80,7 +79,7 @@ try {
         client.interactionsModals.set(interactionFile.split(".")[0], require(path.resolve(path.join(pathFiles, interactionFile))));
     }
 } catch(error) {
-    console.error(color.red('[load:interactions]'), error.message);
+    console.error('[load:interactions]', error.message);
 }
 
 // Handle :: Events ========================================================================================================
@@ -92,21 +91,21 @@ try {
         client.on(event.name, (...args) => event.execute(...args));
     }
 } catch(error) {
-    console.error(color.red('[load:events]'), error.message);
+    console.error('[load:events]', error.message);
 }
 
 // Define token a init bot =================================================================================================
 client.login(token).then(() => {
-    console.log(color.green('[init]'), 'Bot operativo | Inicializado en', color.magenta(`${Date.now() - client.startupTime}ms`));
+    console.log('[init]', 'Bot operativo | Inicializado en', `${Date.now() - client.startupTime}ms`);
 }).catch((error) => {
-    console.error(color.red('[client:token]'), error.message);
+    console.error('[client:token]', error.message);
 });
 
 // Handle Error ============================================================================================================
 process.on('unhandledRejection', (error) => {
-    console.error(color.red('[process:unhandledError]'), error.message);
+    console.error('[process:unhandledError]', error.message);
 });
 
 client.on('shardError', (error) => {
-    console.error(color.red('[process:shardError]'), error.message);
+    console.error('[process:shardError]', error.message);
 });

@@ -9,9 +9,9 @@ module.exports = {
 
         // Ficheros a ignorar (para evitar el bot se reinicie cuando estos ficheros sean modificados)
         ignore_watch : [
-            './config',
-            './data',
-            './logs',
+            './config/*',
+            './data/*',
+            './logs/*',
         ],
 
         log_date_format : 'YYYY-MM-DD HH:mm',

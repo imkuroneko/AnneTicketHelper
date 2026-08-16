@@ -2,7 +2,6 @@
 const SQLite = require('better-sqlite3');
 const dayjs = require('dayjs');
 const timezone = require('dayjs/plugin/timezone');
-const { color } = require('console-log-colors');
 
 // Load configuration files ================================================================================================
 const { serverTimezone } = require('#config/params.json');
@@ -137,7 +136,7 @@ function genMenuUID() {
 
 // Graceful shutdown ========================================================================================================
 function closeDatabase() {
-    try { sql.close(); } catch(error) { console.error(color.red('[sqlite:close]'), error.message); }
+    try { sql.close(); } catch(error) { console.error('[sqlite:close]', error.message); }
 }
 process.once('SIGINT', closeDatabase);
 process.once('SIGTERM', closeDatabase);
@@ -148,7 +147,7 @@ module.exports = {
         try {
             return (stmt.isTicket.get(guildId, channelId).count > 0);
         } catch(error) {
-            console.error(color.red('[sqlite:isTicket]'), error.message);
+            console.error('[sqlite:isTicket]', error.message);
         }
     },
 
@@ -156,7 +155,7 @@ module.exports = {
         try {
             return stmt.countOpenTicketsByUser.get(userId, guildId, categoryId).count;
         } catch(error) {
-            console.error(color.red('[sqlite:countOpenTicketsByUser]'), error.message);
+            console.error('[sqlite:countOpenTicketsByUser]', error.message);
         }
     },
 
@@ -165,7 +164,7 @@ module.exports = {
             const row = stmt.nextTicketNumber.get({ g: guildId, c: categoryId });
             return row.next_number.toString().padStart(5, '0');
         } catch(error) {
-            console.error(color.red('[sqlite:generateTicketId]'), error.message);
+            console.error('[sqlite:generateTicketId]', error.message);
         }
     },
 
@@ -173,7 +172,7 @@ module.exports = {
         try {
             stmt.createNewTicket.run({ i: ticket, g: guildId, c: categoryId, x: channelId, u: userId, sub: subject, desc: description, t: getCurrentTimestamp() });
         } catch(error) {
-            console.error(color.red('[sqlite:createNewTicket]'), error.message);
+            console.error('[sqlite:createNewTicket]', error.message);
         }
     },
 
@@ -189,7 +188,7 @@ module.exports = {
                 description: data.description
             };
         } catch(error) {
-            console.error(color.red('[sqlite:getDataFromTicket]'), error.message);
+            console.error('[sqlite:getDataFromTicket]', error.message);
         }
     },
 
@@ -204,7 +203,7 @@ module.exports = {
 
             stmt.updateStatus.run({ gld: guildId, chn: channelId, sts: status, tms: timestamp });
         } catch(error) {
-            console.error(color.red('[sqlite:updateStatus]'), error.message);
+            console.error('[sqlite:updateStatus]', error.message);
         }
     },
 
@@ -212,7 +211,7 @@ module.exports = {
         try {
             return stmt.getTicketsMemberLeft.all({ gld: guildId, usr: userId });
         } catch(error) {
-            console.error(color.red('[sqlite:getTicketsMemberLeft]'), error.message);
+            console.error('[sqlite:getTicketsMemberLeft]', error.message);
         }
     },
 
@@ -220,7 +219,7 @@ module.exports = {
         try {
             return stmt.listCategoriesByGuild.all(guildId);
         } catch(error) {
-            console.error(color.red('[sqlite:listCategoriesByGuild]'), error.message);
+            console.error('[sqlite:listCategoriesByGuild]', error.message);
         }
     },
 
@@ -228,7 +227,7 @@ module.exports = {
         try {
             stmt.createNewCategory.run({ u: genCatUID(), g: guildId, n: name, c: category, e: emoji, d: description, l: limit });
         } catch(error) {
-            console.error(color.red('[sqlite:createNewCategory]'), error.message);
+            console.error('[sqlite:createNewCategory]', error.message);
         }
     },
 
@@ -236,7 +235,7 @@ module.exports = {
         try {
             return stmt.readCategory.get(uid);
         } catch(error) {
-            console.error(color.red('[sqlite:readCategory]'), error.message);
+            console.error('[sqlite:readCategory]', error.message);
         }
     },
 
@@ -244,7 +243,7 @@ module.exports = {
         try {
             stmt.deleteCategory.run({ uid: uid });
         } catch(error) {
-            console.error(color.red('[sqlite:deleteCategory]'), error.message);
+            console.error('[sqlite:deleteCategory]', error.message);
         }
     },
 
@@ -257,7 +256,7 @@ module.exports = {
             stmt.createMenu.run({ u: menuUid, g: guildId, c: JSON.stringify(categoryUids), t: getCurrentTimestamp() });
             return menuUid;
         } catch(error) {
-            console.error(color.red('[sqlite:createMenu]'), error.message);
+            console.error('[sqlite:createMenu]', error.message);
         }
     },
 
@@ -267,7 +266,7 @@ module.exports = {
             if(typeof row == 'undefined') { return undefined; }
             return JSON.parse(row.categories);
         } catch(error) {
-            console.error(color.red('[sqlite:getMenuCategories]'), error.message);
+            console.error('[sqlite:getMenuCategories]', error.message);
         }
     },
 
@@ -275,7 +274,7 @@ module.exports = {
         try {
             return stmt.countTicketsOnCategory.get(categoryChannelId).count;
         } catch(error) {
-            console.error(color.red('[sqlite:countTicketsOnCategory]'), error.message);
+            console.error('[sqlite:countTicketsOnCategory]', error.message);
         }
     },
 
@@ -284,7 +283,7 @@ module.exports = {
         try {
             return stmt.countTotalCategories.get().count;
         } catch(error) {
-            console.error(color.red('[sqlite:countTotalCategories]'), error.message);
+            console.error('[sqlite:countTotalCategories]', error.message);
         }
     },
 
@@ -292,7 +291,7 @@ module.exports = {
         try {
             return stmt.countTotalTicketsGlobal.get().count;
         } catch(error) {
-            console.error(color.red('[sqlite:countTotalTicketsGlobal]'), error.message);
+            console.error('[sqlite:countTotalTicketsGlobal]', error.message);
         }
     },
 
@@ -300,7 +299,7 @@ module.exports = {
         try {
             return stmt.countTotalTicketsOpen.get().count;
         } catch(error) {
-            console.error(color.red('[sqlite:countTotalTicketsOpen]'), error.message);
+            console.error('[sqlite:countTotalTicketsOpen]', error.message);
         }
     },
 
@@ -308,7 +307,7 @@ module.exports = {
         try {
             return stmt.countTotalTicketsClosed.get().count;
         } catch(error) {
-            console.error(color.red('[sqlite:countTotalTicketsClosed]'), error.message);
+            console.error('[sqlite:countTotalTicketsClosed]', error.message);
         }
     },
 
@@ -316,7 +315,7 @@ module.exports = {
         try {
             return stmt.countTotalTicketsDeleted.get().count;
         } catch(error) {
-            console.error(color.red('[sqlite:countTotalTicketsDeleted]'), error.message);
+            console.error('[sqlite:countTotalTicketsDeleted]', error.message);
         }
     },
 };

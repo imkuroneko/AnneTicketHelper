@@ -1,5 +1,4 @@
 // Load required resources =================================================================================================
-const { color } = require('console-log-colors');
 const { Events } = require('discord.js');
 const path = require('path');
 
@@ -25,7 +24,7 @@ module.exports = {
                 });
             }
         } catch(error) {
-            console.error(color.red('[event:guildMemberRemove]'), error.message);
+            console.error('[event:guildMemberRemove]', error.message);
         }
     }
 };

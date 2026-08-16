@@ -1,5 +1,4 @@
 // Load required resources =================================================================================================
-const { color } = require('console-log-colors');
 const { Routes } = require('discord.js');
 
 // Load configuration files ================================================================================================
@@ -23,13 +22,13 @@ exports.run = (client, message, args) => {
                 message.reply('🦄 Todos los comandos slash de este servidor fueron eliminados');
             }).catch((error) => {
                 message.reply(`\`[🦄 cmdPrefix:slashdeleter]\` ${error.message}`);
-                console.error(color.red('[cmdPrefix:slashdeleter]'), error.message);
+                console.error('[cmdPrefix:slashdeleter]', error.message);
             });
         }).catch((error) => {
             message.reply(`\`[🦄 cmdPrefix:slashdeleter]\` ${error.message}`);
-            console.error(color.red('[cmdPrefix:slashdeleter]'), error.message);
+            console.error('[cmdPrefix:slashdeleter]', error.message);
         });
     } catch(error) {
-        console.error(color.red('[cmdPrefix:slashdeleter]'), error.message);
+        console.error('[cmdPrefix:slashdeleter]', error.message);
     }
 }

@@ -1,9 +1,8 @@
 // Load required resources =================================================================================================
-const { color } = require('console-log-colors');
 const { SlashCommandBuilder, ModalBuilder, ChannelType, TextInputStyle, StringSelectMenuOptionBuilder, MessageFlags } = require('discord.js');
 
 // Load Functions ==========================================================================================================
-const { truncate } = require('#functions/helpers.js');
+const { uid } = require('#functions/helpers.js');
 const { listCategoriesByGuild } = require('#functions/sqlite.js');
 
 // Module script ===========================================================================================================
@@ -54,8 +53,10 @@ module.exports = {
 
             // creacion de categorias
             if(cmd == 'crear') {
+                // El sufijo random evita que Discord precargue en el modal lo que se haya tipeado la vez
+                // anterior (el cliente cachea el contenido de un modal por customId).
                 const modal = new ModalBuilder()
-                    .setCustomId('categoriaCrear')
+                    .setCustomId(`categoriaCrear;${uid(8)}`)
                     .setTitle('Crear Categoría');
 
                 modal.addLabelComponents(
@@ -120,11 +121,13 @@ module.exports = {
                     try {
                         emoji = JSON.parse(cat.emoji);
                     } catch(error) {
-                        console.error(color.red('[interaction:slashcmd:categorias]'), `Emoji inválido en categoría ${cat.uid} (${cat.name}), se omite: ${error.message}`);
+                        console.error('[interaction:slashcmd:categorias]', `Emoji inválido en categoría ${cat.uid} (${cat.name}), se omite: ${error.message}`);
                         return;
                     }
 
-                    options.push(new StringSelectMenuOptionBuilder().setLabel(cat.name).setValue(cat.uid).setEmoji(emoji).setDescription(truncate(cat.description, 100)));
+                    // Nota: Discord no muestra la description de las opciones cuando el select vive dentro de un
+                    // modal (a diferencia de un select en un mensaje normal), así que no la seteamos acá.
+                    options.push(new StringSelectMenuOptionBuilder().setLabel(cat.name).setValue(cat.uid).setEmoji(emoji));
                 });
 
                 if(options.length === 0) {
@@ -134,8 +137,10 @@ module.exports = {
                 // Los select menu de Discord admiten un máximo de 25 opciones
                 if(options.length > 25) { options = options.slice(0, 25); }
 
+                // El sufijo random evita que Discord precargue en el modal la selección de la vez anterior
+                // (el cliente cachea el contenido de un modal por customId).
                 const modal = new ModalBuilder()
-                    .setCustomId('categoriaEliminar')
+                    .setCustomId(`categoriaEliminar;${uid(8)}`)
                     .setTitle('Eliminar Categoría');
 
                 modal.addLabelComponents(
@@ -154,7 +159,7 @@ module.exports = {
 
             return interaction.reply({ content: '🦄 **eep!** opción de acción no válida', flags: MessageFlags.Ephemeral });
         } catch(error) {
-            console.error(color.red('[interaction:slashcmd:categorias]'), error.message);
+            console.error('[interaction:slashcmd:categorias]', error.message);
         }
     }
 };

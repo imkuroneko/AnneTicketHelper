@@ -1,5 +1,4 @@
 // Load required resources =================================================================================================
-const { color } = require('console-log-colors');
 const { MessageFlags } = require('discord.js');
 
 // Load SQLite Helper ======================================================================================================
@@ -25,7 +24,7 @@ module.exports = {
             deleteCategory(uid);
             return interaction.reply({ content: `Se ha eliminado la categoría **${getCategory.name}**! Recuerda deberás modificar manualmente en los selectores donde lo necesites`, flags: MessageFlags.Ephemeral });
         } catch(error) {
-            console.error(color.red('[interaction:modals:categoriaeliminar]'), error.message);
+            console.error('[interaction:modals:categoriaeliminar]', error.message);
         }
     }
 };

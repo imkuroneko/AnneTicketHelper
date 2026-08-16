@@ -1,5 +1,4 @@
 // Load required resources =================================================================================================
-const { color } = require('console-log-colors');
 const { SlashCommandBuilder } = require('discord.js');
 
 // Module script ===========================================================================================================
@@ -16,7 +15,7 @@ module.exports = {
                 description: 'Sistema de tickets multicategorías para Discord.\n**Desarrollado por:** [@KuroNeko](https://github.com/imkuroneko)',
             }] });
         } catch(error) {
-            console.error(color.red('[interaction:slashcmd:acercade]'), error.message);
+            console.error('[interaction:slashcmd:acercade]', error.message);
         }
     }
 };

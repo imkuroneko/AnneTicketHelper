@@ -1,5 +1,4 @@
 // Load required resources =================================================================================================
-const { color } = require('console-log-colors');
 const { Events } = require('discord.js');
 const path = require('path');
 
@@ -19,7 +18,7 @@ module.exports = {
 
             await updateStatus(guildId, channelId, 'deleted');
         } catch(error) {
-            console.error(color.red('[event:channelDelete]'), error.message);
+            console.error('[event:channelDelete]', error.message);
         }
     }
 };

@@ -1,5 +1,4 @@
 // Load required resources =================================================================================================
-const { color } = require('console-log-colors');
 const { ButtonBuilder, ActionRowBuilder, ButtonStyle, MessageFlags, OverwriteType } = require('discord.js');
 const path = require('path');
 
@@ -60,7 +59,7 @@ module.exports = {
                 channelEdit.edit({ permissionOverwrites: channelPermissions });
             });
         } catch(error) {
-            console.error(color.red('[interaction:buttons:reopenticket]'), error);
+            console.error('[interaction:buttons:reopenticket]', error);
         }
     }
 };
