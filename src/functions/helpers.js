@@ -74,4 +74,9 @@ module.exports = {
         var reg=/^([0-9a-f]{3}){1,2}$/i;
         return reg.test(color);
     },
+
+    truncate: function(val, maxLength) {
+        if(val.length <= maxLength) { return val; }
+        return val.slice(0, maxLength - 1) + '…';
+    },
 };

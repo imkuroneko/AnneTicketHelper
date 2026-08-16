@@ -39,7 +39,7 @@ const { ContainerBuilder } = require('discord.js');
 
 function buildV2Embed({ title, description, footer, color, button }) {
     let content = '';
-    if (title) content += `## ${title}\n\n`;
+    if (title) content += `### ${title}\n\n`;
     content += description;
     if (footer) content += `\n\n-# ${footer}`; // "-# " = subtext de Discord, imita el footer chico del embed clásico
 

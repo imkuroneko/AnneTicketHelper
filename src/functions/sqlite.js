@@ -107,7 +107,6 @@ const stmt = {
     getMenuCategories: sql.prepare(" SELECT categories FROM tickets_menus WHERE uid = ? "),
     createNewCategory: sql.prepare(" INSERT INTO tickets_categories (uid, guild, name, category, emoji, description, limit_tickets) VALUES (@u, @g, @n, @c, @e, @d, @l); "),
     readCategory: sql.prepare(" SELECT * FROM tickets_categories WHERE uid = ? "),
-    updateCategory: sql.prepare(" UPDATE tickets_categories SET name = @n, description = @d, limit_tickets = @l WHERE uid = @u; "),
     deleteCategory: sql.prepare(" DELETE FROM tickets_categories WHERE uid = @uid; "),
     countTicketsOnCategory: sql.prepare(" SELECT count(*) as count FROM tickets_details WHERE category = ? AND status != 'D' "),
 
@@ -238,14 +237,6 @@ module.exports = {
             return stmt.readCategory.get(uid);
         } catch(error) {
             console.error(color.red('[sqlite:readCategory]'), error.message);
-        }
-    },
-
-    updateCategory: (uid, name, description, limit) => {
-        try {
-            stmt.updateCategory.run({ n: name, d: description, l: limit, u: uid });
-        } catch(error) {
-            console.error(color.red('[sqlite:updateCategory]'), error.message);
         }
     },
 
