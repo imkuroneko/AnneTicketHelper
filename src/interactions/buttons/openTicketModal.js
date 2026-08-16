@@ -3,18 +3,23 @@ const { color } = require('console-log-colors');
 const { ModalBuilder, TextInputStyle, StringSelectMenuOptionBuilder } = require('discord.js');
 
 // Load SQLite Helper ======================================================================================================
-const { readCategory } = require('#functions/sqlite.js');
+const { readCategory, getMenuCategories } = require('#functions/sqlite.js');
 
 // Module script ===========================================================================================================
 module.exports = {
     name: 'openTicketModal',
     async execute(interaction) {
         try {
-            const uids = (interaction.customId).replace('openTicketModal;', '').split(',');
+            const menuUid = (interaction.customId).replace('openTicketModal;', '');
+            const uids = getMenuCategories(menuUid);
+
+            if(typeof uids == 'undefined') {
+                return interaction.reply({ content: 'Este menú ya no está disponible.', ephemeral: true });
+            }
 
             var categoryOptions = [];
             uids.forEach((catUid) => {
-                const catInfo = readCategory(catUid.trim());
+                const catInfo = readCategory(catUid);
                 if(typeof catInfo == 'undefined') { return; }
 
                 var emoji;

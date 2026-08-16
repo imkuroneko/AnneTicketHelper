@@ -48,11 +48,20 @@ sql.exec(`
         PRIMARY KEY("guild", "category")
     );
 
+    CREATE TABLE IF NOT EXISTS tickets_menus (
+        "uid"                TEXT NOT NULL,
+        "guild"               TEXT NOT NULL,
+        "categories"          TEXT NOT NULL,
+        "timestamp_creation"  TEXT NOT NULL,
+        PRIMARY KEY("uid")
+    );
+
     CREATE UNIQUE INDEX IF NOT EXISTS idx_tickets_details_guild_category_ticket ON tickets_details("guild", "category", "ticket");
     CREATE INDEX IF NOT EXISTS idx_tickets_details_guild_channel ON tickets_details("guild", "channel");
     CREATE INDEX IF NOT EXISTS idx_tickets_details_guild_user_category_status ON tickets_details("guild", "user", "category", "status");
     CREATE INDEX IF NOT EXISTS idx_tickets_details_category_status ON tickets_details("category", "status");
     CREATE INDEX IF NOT EXISTS idx_tickets_details_status ON tickets_details("status");
+    CREATE INDEX IF NOT EXISTS idx_tickets_menus_guild ON tickets_menus("guild");
 `);
 
 // Schema migrations (columnas agregadas después de la versión original de la tabla) =======================================
@@ -93,6 +102,9 @@ const stmt = {
 
     listCategoriesByGuild: sql.prepare(" SELECT * FROM tickets_categories WHERE guild = ? "),
     categoryUidExists: sql.prepare(" SELECT count(*) as count FROM tickets_categories WHERE uid = ? "),
+    menuUidExists: sql.prepare(" SELECT count(*) as count FROM tickets_menus WHERE uid = ? "),
+    createMenu: sql.prepare(" INSERT INTO tickets_menus (uid, guild, categories, timestamp_creation) VALUES (@u, @g, @c, @t); "),
+    getMenuCategories: sql.prepare(" SELECT categories FROM tickets_menus WHERE uid = ? "),
     createNewCategory: sql.prepare(" INSERT INTO tickets_categories (uid, guild, name, category, emoji, description, limit_tickets) VALUES (@u, @g, @n, @c, @e, @d, @l); "),
     readCategory: sql.prepare(" SELECT * FROM tickets_categories WHERE uid = ? "),
     updateCategory: sql.prepare(" UPDATE tickets_categories SET name = @n, description = @d, limit_tickets = @l WHERE uid = @u; "),
@@ -117,6 +129,11 @@ function getCurrentTimestamp() {
 function genCatUID() {
     var newUID = uid(8);
     if(stmt.categoryUidExists.get(newUID).count == 0) { return newUID; } else { return genCatUID(); }
+}
+
+function genMenuUID() {
+    var newUID = uid(8);
+    if(stmt.menuUidExists.get(newUID).count == 0) { return newUID; } else { return genMenuUID(); }
 }
 
 // Graceful shutdown ========================================================================================================
@@ -237,6 +254,29 @@ module.exports = {
             stmt.deleteCategory.run({ uid: uid });
         } catch(error) {
             console.error(color.red('[sqlite:deleteCategory]'), error.message);
+        }
+    },
+
+    // Guarda qué categorías forman parte de un menú (mensaje con el botón "Abrir Ticket") ya publicado, para que el
+    // botón solo necesite llevar un UID corto en su customId en vez de la lista completa (que puede superar el
+    // límite de 100 caracteres que tiene Discord para customId si se eligen muchas categorías).
+    createMenu: (guildId, categoryUids) => {
+        try {
+            const menuUid = genMenuUID();
+            stmt.createMenu.run({ u: menuUid, g: guildId, c: JSON.stringify(categoryUids), t: getCurrentTimestamp() });
+            return menuUid;
+        } catch(error) {
+            console.error(color.red('[sqlite:createMenu]'), error.message);
+        }
+    },
+
+    getMenuCategories: (menuUid) => {
+        try {
+            const row = stmt.getMenuCategories.get(menuUid);
+            if(typeof row == 'undefined') { return undefined; }
+            return JSON.parse(row.categories);
+        } catch(error) {
+            console.error(color.red('[sqlite:getMenuCategories]'), error.message);
         }
     },
 
