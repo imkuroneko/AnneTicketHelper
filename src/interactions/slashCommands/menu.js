@@ -2,6 +2,9 @@
 const { color } = require('console-log-colors');
 const { SlashCommandBuilder, ModalBuilder, StringSelectMenuOptionBuilder, MessageFlags } = require('discord.js');
 
+// Load Functions ===========================================================================================================
+const { truncate } = require('#functions/helpers.js');
+
 // Load SQLite Helper ======================================================================================================
 const { listCategoriesByGuild } = require('#functions/sqlite.js');
 
@@ -25,7 +28,7 @@ module.exports = {
                     return;
                 }
 
-                options.push(new StringSelectMenuOptionBuilder().setLabel(cat.name).setValue(cat.uid).setEmoji(emoji));
+                options.push(new StringSelectMenuOptionBuilder().setLabel(cat.name).setValue(cat.uid).setEmoji(emoji).setDescription(truncate(cat.description, 100)));
             });
 
             if(options.length === 0) {

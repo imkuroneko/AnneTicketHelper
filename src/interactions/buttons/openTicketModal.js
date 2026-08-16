@@ -2,6 +2,9 @@
 const { color } = require('console-log-colors');
 const { ModalBuilder, TextInputStyle, StringSelectMenuOptionBuilder, MessageFlags } = require('discord.js');
 
+// Load Functions ===========================================================================================================
+const { truncate } = require('#functions/helpers.js');
+
 // Load SQLite Helper ======================================================================================================
 const { readCategory, getMenuCategories } = require('#functions/sqlite.js');
 
@@ -31,7 +34,7 @@ module.exports = {
                 }
 
                 categoryOptions.push(
-                    new StringSelectMenuOptionBuilder().setLabel(catInfo.name).setValue(catInfo.uid).setEmoji(emoji)
+                    new StringSelectMenuOptionBuilder().setLabel(catInfo.name).setValue(catInfo.uid).setEmoji(emoji).setDescription(truncate(catInfo.description, 100))
                 );
             });
 

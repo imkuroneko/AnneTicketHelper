@@ -1,11 +1,10 @@
 // Load required resources =================================================================================================
-const path = require('path');
 const { color } = require('console-log-colors');
-const { SlashCommandBuilder, ChannelType, MessageFlags } = require('discord.js');
+const { SlashCommandBuilder, ModalBuilder, ChannelType, TextInputStyle, StringSelectMenuOptionBuilder, MessageFlags } = require('discord.js');
 
 // Load Functions ==========================================================================================================
-const { hasDiscordEmojis, hasUnicodeEmojis, getFirstDiscordEmoji, getFirstUnicodeEmoji } = require('#functions/helpers.js');
-const { listCategoriesByGuild, createNewCategory, readCategory, updateCategory, countTicketsOnCategory, deleteCategory } = require('#functions/sqlite.js');
+const { truncate } = require('#functions/helpers.js');
+const { listCategoriesByGuild } = require('#functions/sqlite.js');
 
 // Module script ===========================================================================================================
 module.exports = {
@@ -25,23 +24,7 @@ module.exports = {
         .addSubcommand((subcommand) =>
             subcommand
                 .setName('crear')
-                .setDescription('Crear Categoría')
-                .addStringOption(option => option.setName('nombre').setDescription('Nombre de la categoría').setRequired(true).setMinLength(5).setMaxLength(35))
-                .addStringOption(option => option.setName('descripcion').setDescription('Descripción de la categoría').setRequired(true).setMinLength(10).setMaxLength(300))
-                .addStringOption(option => option.setName('emoji').setDescription('Emoji de la categoría (Utilizar emojis neutrales)').setRequired(true))
-                .addChannelOption(option => option.setName('categoria').setDescription('Categoría donde se crearán los tickets').setRequired(true).addChannelTypes(ChannelType.GuildCategory))
-                .addIntegerOption(option => option.setName('limite').setDescription('Límite de tickets que puede abrir un usuario en simultáneo en la categoría').setRequired(true))
-        )
-
-        // Comando de editar
-        .addSubcommand((subcommand) =>
-            subcommand
-                .setName('editar')
-                .setDescription('Editar descripción y límite de la categoría')
-                .addStringOption(option => option.setName('uid').setDescription('ID de la categoría').setRequired(true).setMinLength(8).setMaxLength(8))
-                .addStringOption(option => option.setName('nombre').setDescription('Nuevo nombre de la categoría').setRequired(true).setMinLength(5).setMaxLength(35))
-                .addStringOption(option => option.setName('descripcion').setDescription('Nueva descripción de la categoría').setRequired(true).setMinLength(10).setMaxLength(300))
-                .addIntegerOption(option => option.setName('limite').setDescription('Nuevo límite de tickets que puede abrir un usuario en simultáneo en la categoría').setRequired(true))
+                .setDescription('Crear una categoría de ticket')
         )
 
         // Comando de eliminar
@@ -49,7 +32,6 @@ module.exports = {
             subcommand
                 .setName('eliminar')
                 .setDescription('Eliminar una categoría de ticket')
-                .addStringOption(option => option.setName('uid').setDescription('ID de la categoría').setRequired(true).setMinLength(8).setMaxLength(8))
         ),
     async execute(interaction) {
         try {
@@ -72,91 +54,100 @@ module.exports = {
 
             // creacion de categorias
             if(cmd == 'crear') {
-                const nombre = interaction.options.getString('nombre');
-                const descripcion = interaction.options.getString('descripcion');
-                const emoji = interaction.options.getString('emoji');
-                const categoria = interaction.options.getChannel('categoria');
-                const limite = interaction.options.getInteger('limite');
+                const modal = new ModalBuilder()
+                    .setCustomId('categoriaCrear')
+                    .setTitle('Crear Categoría');
 
-                if(isNaN(limite)) { return interaction.reply({ content: 'El límite debe ser numérico', flags: MessageFlags.Ephemeral }); }
-                if(limite == 0)   { return interaction.reply({ content: 'El límite debe ser mayor a cero.', flags: MessageFlags.Ephemeral }); }
+                modal.addLabelComponents(
+                    label => label
+                        .setLabel('Nombre')
+                        .setTextInputComponent(input => input
+                            .setCustomId('nombre')
+                            .setStyle(TextInputStyle.Short)
+                            .setMinLength(5)
+                            .setMaxLength(35)
+                            .setRequired(true)
+                        ),
+                    label => label
+                        .setLabel('Descripción')
+                        .setTextInputComponent(input => input
+                            .setCustomId('descripcion')
+                            .setStyle(TextInputStyle.Paragraph)
+                            .setMinLength(10)
+                            .setMaxLength(300)
+                            .setRequired(true)
+                        ),
+                    label => label
+                        .setLabel('Emoji (utilizar emojis neutrales)')
+                        .setTextInputComponent(input => input
+                            .setCustomId('emoji')
+                            .setStyle(TextInputStyle.Short)
+                            .setMaxLength(35)
+                            .setRequired(true)
+                        ),
+                    label => label
+                        .setLabel('Límite de tickets simultáneos por usuario')
+                        .setTextInputComponent(input => input
+                            .setCustomId('limite')
+                            .setStyle(TextInputStyle.Short)
+                            .setMaxLength(3)
+                            .setRequired(true)
+                        ),
+                    label => label
+                        .setLabel('Categoría de Discord (canal padre)')
+                        .setChannelSelectMenuComponent(select => select
+                            .setCustomId('categoria')
+                            .addChannelTypes(ChannelType.GuildCategory)
+                        )
+                );
 
-                if(hasDiscordEmojis(descripcion) || hasUnicodeEmojis(descripcion)) { return interaction.reply({ content: 'La descripción no puede contener emojis', flags: MessageFlags.Ephemeral }); }
-
-                if(!hasUnicodeEmojis(emoji) && !hasDiscordEmojis(emoji)) { return interaction.reply({ content: 'Por favor escriba un emoji en el campo **emoji**', flags: MessageFlags.Ephemeral }); }
-
-                if(hasDiscordEmojis(emoji)) {
-                    if(emoji.startsWith('<a:')) { return interaction.reply({ content: 'No se permiten emojis animados', flags: MessageFlags.Ephemeral }); }
-
-                    emote = getFirstDiscordEmoji(emoji);
-                    emojiContent = emoji.replace('<:', '');
-                    emojiContent = emojiContent.replace('>', '');
-                    emojiContent = emojiContent.split(':');
-
-                    catEmoji = JSON.stringify({ name: emojiContent[0], id: emojiContent[1] });
-                } else if(hasUnicodeEmojis(emoji)) {
-                    catEmoji = JSON.stringify({ name: getFirstUnicodeEmoji(emoji) });
-                } else {
-                    catEmoji = JSON.stringify({ name: '🎫' });
-                }
-
-                createNewCategory(interaction.guildId, nombre, categoria.id, catEmoji, descripcion, limite);
-
-                return interaction.reply({
-                    embeds: [{
-                            color: 0x4f30b3,
-                            title: 'Nueva categoría creada',
-                            fields: [
-                                { name: 'Nombre', value: nombre, inline: true },
-                                { name: 'Emoji', value: emoji, inline: true },
-                                { name: 'Limite Tickets', value: limite, inline: true },
-                                { name: 'Descripción', value: descripcion, inline: false },
-                                { name: 'Categoria', value: categoria.name+' ('+categoria.id+')', inline: false },
-                            ]
-                    }],
-                    flags: MessageFlags.Ephemeral
-                });
-            }
-
-            // editar categoria
-            if(cmd == 'editar') {
-                const uid = interaction.options.getString('uid');
-                const nombre = interaction.options.getString('nombre');
-                const descripcion = interaction.options.getString('descripcion');
-                const limite = interaction.options.getInteger('limite');
-
-                var getCategory = await readCategory(uid);
-
-                if(typeof getCategory == 'undefined' || getCategory.guild !== interaction.guildId) {
-                    return interaction.reply({ content: 'No se ha encontrado una categoría con el UID indicado', flags: MessageFlags.Ephemeral });
-                }
-
-                if(isNaN(limite)) { return interaction.reply({ content: 'El límite debe ser numérico', flags: MessageFlags.Ephemeral }); }
-                if(limite == 0)   { return interaction.reply({ content: 'El límite debe ser mayor a cero.', flags: MessageFlags.Ephemeral }); }
-                if(hasDiscordEmojis(descripcion) || hasUnicodeEmojis(descripcion)) { return interaction.reply({ content: 'La descripción no puede contener emojis', flags: MessageFlags.Ephemeral }); }
-
-                await updateCategory(uid, nombre, descripcion, limite);
-
-                return interaction.reply({ content: 'Se ha modificado la categoría! Recuerda deberás modificar manualmente en los selectores donde lo necesites', flags: MessageFlags.Ephemeral });
+                return await interaction.showModal(modal);
             }
 
             // eliminar categoria
             if(cmd == 'eliminar') {
-                const uid = interaction.options.getString('uid');
+                const categorias = listCategoriesByGuild(interaction.guildId);
 
-                var getCategory = await readCategory(uid);
-
-                if(typeof getCategory == 'undefined' || getCategory.guild !== interaction.guildId) {
-                    return interaction.reply({ content: 'No se ha encontrado una categoría con el UID indicado', flags: MessageFlags.Ephemeral });
+                if(categorias.length === 0) {
+                    return interaction.reply({ content: 'No hay categorías registradas en este servidor.', flags: MessageFlags.Ephemeral });
                 }
 
-                var ticketsOnCat = await countTicketsOnCategory(getCategory.category);
-                if(ticketsOnCat > 0) {
-                    return interaction.reply({ content: 'No se puede eliminar esta categoría porque aún hay tickets (nuevos/abiertos/cerrados)', flags: MessageFlags.Ephemeral });
+                var options = [];
+                categorias.forEach((cat) => {
+                    var emoji;
+                    try {
+                        emoji = JSON.parse(cat.emoji);
+                    } catch(error) {
+                        console.error(color.red('[interaction:slashcmd:categorias]'), `Emoji inválido en categoría ${cat.uid} (${cat.name}), se omite: ${error.message}`);
+                        return;
+                    }
+
+                    options.push(new StringSelectMenuOptionBuilder().setLabel(cat.name).setValue(cat.uid).setEmoji(emoji).setDescription(truncate(cat.description, 100)));
+                });
+
+                if(options.length === 0) {
+                    return interaction.reply({ content: 'Ninguna categoría tiene datos válidos para mostrar.', flags: MessageFlags.Ephemeral });
                 }
 
-                await deleteCategory(uid);
-                return interaction.reply({ content: 'Se ha eliminado la categoría! Recuerda deberás modificar manualmente en los selectores donde lo necesites', flags: MessageFlags.Ephemeral });
+                // Los select menu de Discord admiten un máximo de 25 opciones
+                if(options.length > 25) { options = options.slice(0, 25); }
+
+                const modal = new ModalBuilder()
+                    .setCustomId('categoriaEliminar')
+                    .setTitle('Eliminar Categoría');
+
+                modal.addLabelComponents(
+                    label => label
+                        .setLabel('Categoría a eliminar')
+                        .setStringSelectMenuComponent(select => select
+                            .setCustomId('categoria')
+                            .setMinValues(1)
+                            .setMaxValues(1)
+                            .addOptions(options)
+                        )
+                );
+
+                return await interaction.showModal(modal);
             }
 
             return interaction.reply({ content: '🦄 **eep!** opción de acción no válida', flags: MessageFlags.Ephemeral });
